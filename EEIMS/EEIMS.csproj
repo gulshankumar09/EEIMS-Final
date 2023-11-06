@@ -297,6 +297,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="TextFile1.txt" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -332,7 +333,6 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Employee\Index.cshtml" />
-    <Content Include="Views\Employee\GetEmployeeDetail.cshtml" />
     <Content Include="Views\Account\VerifyOTP.cshtml" />
     <Content Include="Views\Employee\FirstTimeAddEmployee.cshtml" />
     <Content Include="Views\Employee\GetEmployeeList.cshtml" />
@@ -352,6 +352,8 @@
     <Content Include="Views\Assignment\CreateNewAssinment.cshtml" />
     <Content Include="Views\Assignment\Index.cshtml" />
     <Content Include="Views\Employee\UpdateEmployee.cshtml" />
+    <Content Include="Views\Employee\GetEmployeeDetail.cshtml" />
+    <Content Include="Views\Employee\EmployeeProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

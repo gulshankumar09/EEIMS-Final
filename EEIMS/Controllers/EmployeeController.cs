@@ -73,11 +73,11 @@ namespace EEIMS.Controllers
             return View();
         }
 
-
         [HttpGet]
-        public ActionResult UpdateEmployee()
+        public ActionResult GetEmployeeDetail()
         {
             var employee = _employeeRepository.GetById(User.Identity.GetUserId());
+
             var newDetails = new UpdateEmployeeViewModel
             {
                 Id = employee.Id,
@@ -87,9 +87,10 @@ namespace EEIMS.Controllers
                 Designation = employee.Designation,
                 Department = employee.Department,
                 PhoneNumber = employee.PhoneNumber,
+                Email = employee.Email,
                 Organization = employee.Organization
             };
-            return View(newDetails);
+            return Json(employee, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -100,8 +101,10 @@ namespace EEIMS.Controllers
                 _employeeRepository.Update(model);
                 return RedirectToAction("Index");
             }
-            return View();
+            return View(model);
         }
+
+        
 
 
         public ActionResult Delete(int id)
@@ -110,11 +113,13 @@ namespace EEIMS.Controllers
             return View();
         }
 
-        public ActionResult GetEmployeeDetail(string id )
+        public ActionResult EmployeeProfile()
         {
-            var employee = _employeeRepository.GetById(id);
-            return View(employee);
+            return View();
         }
+
+
+        
 
         //
         //Created a Dropdown list for any

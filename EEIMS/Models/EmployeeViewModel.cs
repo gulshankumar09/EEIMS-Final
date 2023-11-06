@@ -83,6 +83,13 @@ namespace EEIMS.Models
         [DataType(DataType.PhoneNumber)]
         public string PhoneNumber { get; set; }
 
+        [Required]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Required]
         public string Organization { get; set; }
     }
+
+   
 }

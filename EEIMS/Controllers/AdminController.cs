@@ -23,11 +23,12 @@ namespace EEIMS.Controllers
         }   
 
         //
-        //
+        // use this function to create roles( accesible only via url) no navigation provided.
         public async  Task<ActionResult> CreatRoles()
         {
             var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
             var roleManager = new RoleManager<IdentityRole>(roleStore);
+            await roleManager.CreateAsync(new IdentityRole("Admin"));
             await roleManager.CreateAsync(new IdentityRole("Manager"));
             await roleManager.CreateAsync(new IdentityRole("Employee"));
             

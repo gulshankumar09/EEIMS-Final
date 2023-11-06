@@ -53,13 +53,14 @@ namespace EEIMS.Repositories
         {
             try
             {
-                var temp = Context.Employees.Where(e => e.Id == model.Id).FirstOrDefault();
+                var temp = Context.Employees.Where(e => e.EmployeeId == model.EmployeeId).FirstOrDefault();
 
                 temp.FirstName = model.FirstName;
                 temp.LastName = model.LastName;
                 temp.Designation = model.Designation;
                 temp.Department = model.Department;
                 temp.PhoneNumber = model.PhoneNumber;
+                temp.Email = model.Email;
                 temp.Organization = model.Organization;
 
                 SaveChanges();
@@ -70,6 +71,7 @@ namespace EEIMS.Repositories
                 throw e;    
             }
         }
+
 
 
         void IEmployeeRepository.Delete(Expression<Func<Employee, bool>> where)
