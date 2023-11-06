@@ -1,0 +1,74 @@
+﻿@model EEIMS.Models.Employee
+
+@{
+    ViewBag.Title = "GetEmployeeDetail";
+}
+
+<h2>GetEmployeeDetail</h2>
+
+<div>
+    <h4>Employee</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Designation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Designation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Department)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Department)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNumber)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "EditEmployee", new { id = Model.EmployeeId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

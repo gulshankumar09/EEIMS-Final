@@ -1,0 +1,57 @@
+﻿@model IEnumerable<EEIMS.Models.ReviewRequestsViewModel>
+
+@{
+    ViewBag.Title = "ReviewRequests";
+}
+
+<h2>ReviewRequests</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.RequestId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RequestDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Comments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RequestedBy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Category)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RequestId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RequestDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RequestedBy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Category)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,65 @@
+﻿
+@model EEIMS.Models.GetAllEmployeeVewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<h3 style="align-items:center">Employee List</h3>
+                    ,
+<table id="employeeTbl" class="table table-info table-light table-hover ">
+    <caption>List of members</caption>
+    
+</table>
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $('#employeeTbl').DataTable({
+                ajax: {
+                    url: '/Employee/GetEmployeeList',
+                    dataSrc: ''
+                },
+                columns: [
+                    { title: 'Employee ID', data: 'EmployeeId' },
+                    { title: 'First Name', data: 'FirstName' },
+                    { title: 'Last Name', data: 'LastName' },
+                    { title: 'Designation', data: 'Designation' },
+                    { title: 'Department', data: 'Department' },
+                    {
+                        title: 'Actions',
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<button class="btn btn-primary" onclick="editEmployee(' + row.EmployeeId + ')">Edit</button>' +
+                                '<button class="btn btn-danger" onclick="deleteEmployee(' + row.EmployeeId + ')">Delete</button>' +
+                                '<button class="btn btn-info" onclick="getEmployeeDetails(' + row.EmployeeId + ')">Details</button>';
+                        }
+                    }
+                ]
+            });
+        });
+
+        function editEmployee(id) {
+            // Add your edit employee code here
+        }
+
+        function deleteEmployee(id) {
+            function deleteEmployee(id) {
+                $.ajax({
+                    url: '/Employee/DeleteEmployee',
+                    type: 'POST',
+                    data: { 'id': id },
+                    success: function (result) {
+                        if (result.success) {
+                            $('#employeeTbl').DataTable().ajax.reload();
+                        } else { alert(result.message); }
+                    }
+                });
+            }
+        }
+
+        function getEmployeeDetails(id) {
+            // Add your get employee details code here
+        }
+    </script>
+}

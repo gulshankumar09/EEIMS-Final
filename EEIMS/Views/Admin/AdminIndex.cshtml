@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "AdminIndex";
+}
+
+<h2>Roles of Employees</h2>
+
+
+
+
+<div class="conta">
+    <div class="">
+        <table id="adminsRoleTbl">
+            <caption>List of Admins</caption>
+        </table>
+    </div>
+    <div  class="">
+        <table id="managersRoleTbl" class="table table-info table-light table-hover ">
+            <caption>List of Admins</caption>
+        </table>
+    </div>
+
+</div>
+
+
+
+
+
+
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            $('#adminsRoleTbl').DataTable({
+                ajax: {
+                    url: '/Admin/GetAdminRoleUsers',
+                    dataSrc: ''
+                },
+                columns: [
+                    { title: 'Employee ID', data: 'EmployeeId' },
+                    { title: 'Name', data: 'FullName' },
+
+                    {
+                        title: 'Actions',
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<button class="btn btn-danger" onclick="deleteEmployee(' + row.EmployeeId + ')">Delete</button>';
+                        }
+                    }
+                ]
+            });
+
+            $('#managersRoleTbl').DataTable({
+                ajax: {
+                    url: '/Admin/GetManagerRoleUsers',
+                    dataSrc: ''
+                },
+                columns: [
+                    { title: 'Employee ID', data: 'EmployeeId' },
+                    { title: 'Name', data: 'FullName' },
+
+                    {
+                        title: 'Actions',
+                        data: null,
+                        render: function (data, type, row) {
+                            return '<button class="btn btn-danger" onclick="deleteEmployee(' + row.EmployeeId + ')">Delete</button>';
+                        }
+                    }
+                ]
+            });
+        });
+
+
+    </script>
+}
