@@ -335,12 +335,12 @@
     <Content Include="Views\Employee\Index.cshtml" />
     <Content Include="Views\Account\VerifyOTP.cshtml" />
     <Content Include="Views\Employee\FirstTimeAddEmployee.cshtml" />
-    <Content Include="Views\Employee\GetEmployeeList.cshtml" />
-    <Content Include="Views\Admin\CreatRoles.cshtml" />
+    <Content Include="Views\Employee\GetVerifiedEmployeeList.cshtml" />
+    <Content Include="Views\Admin\CreateRoles.cshtml" />
     <Content Include="Views\Admin\AdminIndex.cshtml" />
-    <Content Include="Views\Admin\AssignRoleToEmployee.cshtml" />
-    <Content Include="Views\Admin\GetAdminRoleUsers.cshtml" />
-    <Content Include="Views\Admin\GetManagerRoleUsers.cshtml" />
+    <Content Include="Views\Admin\AssignRoles.cshtml" />
+    <Content Include="Views\Admin\GetAdminUsers.cshtml" />
+    <Content Include="Views\Admin\GetManagerUsers.cshtml" />
     <Content Include="Views\Category\AddOrUpdateCategory.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
     <Content Include="Views\Equipment\AddNewEquipment.cshtml" />
@@ -354,6 +354,8 @@
     <Content Include="Views\Employee\UpdateEmployee.cshtml" />
     <Content Include="Views\Employee\GetEmployeeDetail.cshtml" />
     <Content Include="Views\Employee\EmployeeProfile.cshtml" />
+    <Content Include="Views\Admin\ManagerIndex.cshtml" />
+    <Content Include="Views\Employee\DetailsAdminUse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -13,10 +13,7 @@ namespace EEIMS.Repositories
     {
         private ApplicationDbContext _context;
 
-        public EmployeeRepository()
-        {
-
-        }
+        public EmployeeRepository() { }
 
         public EmployeeRepository(ApplicationDbContext applicationDbContext)
         {
@@ -72,14 +69,6 @@ namespace EEIMS.Repositories
             }
         }
 
-
-
-        void IEmployeeRepository.Delete(Expression<Func<Employee, bool>> where)
-        {
-            Context.Employees.Remove(Context.Employees.Where(where).FirstOrDefault());
-            SaveChanges();
-        }
-
         void IEmployeeRepository.DeleteById(int id)
         {
             Context.Employees.Remove(Context.Employees.Where(e => e.EmployeeId == id).FirstOrDefault());
@@ -87,25 +76,21 @@ namespace EEIMS.Repositories
         }
 
         //
-        // Summary: For getting employee by Id (string Type)
+        // For getting employee by Id (string Type)
         Employee IEmployeeRepository.GetById(string id)
         {
             return Context.Employees.Where(e => e.Id == id).FirstOrDefault();
         }
+
         Employee IEmployeeRepository.Get(Expression<Func<Employee, bool>> where)
         {
             return Context.Employees.Where(where).FirstOrDefault();
         }
 
 
-        IEnumerable<Employee> IEmployeeRepository.GetAllEmployee()
+        IEnumerable<Employee> IEmployeeRepository.GetAllVerifiedEmployee()
         {
-            return Context.Employees.ToList();
-        }
-
-        IEnumerable<Employee> IEmployeeRepository.GetMany(Expression<Func<Employee, bool>> where)
-        {
-            return Context.Employees.Where(where).ToList();
+            return Context.Employees.Where(e => e.IsVerified == true).ToList();
         }
 
 

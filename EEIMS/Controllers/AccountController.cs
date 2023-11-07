@@ -217,8 +217,6 @@ namespace EEIMS.Controllers
                     }
 
                     var temp = user.Id;
-                    
-
                     return RedirectToAction("FirstTimeAddEmployee", "Employee", new {UserId = user.Id});
                 }
 

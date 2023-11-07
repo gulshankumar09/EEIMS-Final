@@ -20,11 +20,16 @@ namespace EEIMS.Controllers
         public ActionResult AdminIndex()
         {
             return View();
+        } 
+        
+        public ActionResult ManagerIndex()
+        {
+            return View();
         }   
 
         //
         // use this function to create roles( accesible only via url) no navigation provided.
-        public async  Task<ActionResult> CreatRoles()
+        public async  Task<ActionResult> CreateRoles()
         {
             var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
             var roleManager = new RoleManager<IdentityRole>(roleStore);
@@ -36,14 +41,14 @@ namespace EEIMS.Controllers
         }
 
 
-        public  ActionResult GetAdminRoleUsers()
+        public ActionResult GetAdminUsers()
         {
             var context = new ApplicationDbContext();
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
-               
+
             var adminRole = roleManager.FindByName("Admin");
-            if(adminRole == null)
+            if (adminRole == null)
             {
                 return View("Error");
             }
@@ -51,27 +56,29 @@ namespace EEIMS.Controllers
 
             List<EmployeeRoleViewModel> adminRoleViewModels = new List<EmployeeRoleViewModel>();
 
-            foreach(var adminUser in adminUsers)
+            foreach (var adminUser in adminUsers)
             {
                 var employees = context.Employees.FirstOrDefault(e => e.Id == adminUser.Id);
                 var adminRoleViewModel = new EmployeeRoleViewModel
                 {
+                    Id = adminUser.Id,
                     EmployeeId = employees.EmployeeId,
-                    FullName = employees.FirstName + " " + employees.LastName
+                    FullName = employees.FirstName + " " + employees.LastName,
+                    Department = employees.Department
                 };
                 adminRoleViewModels.Add(adminRoleViewModel);
             }
-            return View(adminRoleViewModels);
+            return Json(adminRoleViewModels, JsonRequestBehavior.AllowGet);
         }
 
-        public  ActionResult GetManagerRoleUsers()
+        public ActionResult GetManagerUsers()
         {
             var context = new ApplicationDbContext();
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
-               
+
             var managerRole = roleManager.FindByName("Manager");
-            if(managerRole == null)
+            if (managerRole == null)
             {
                 return View("Error");
             }
@@ -79,14 +86,15 @@ namespace EEIMS.Controllers
 
             List<EmployeeRoleViewModel> managerRoleViewModels = new List<EmployeeRoleViewModel>();
 
-            foreach(var adminUser in adminUsers)
+            foreach (var adminUser in adminUsers)
             {
                 var employees = context.Employees.FirstOrDefault(e => e.Id == adminUser.Id);
                 var managerRoleViewModel = new EmployeeRoleViewModel
                 {
                     Id = adminUser.Id,
                     EmployeeId = employees.EmployeeId,
-                    FullName = employees.FirstName + " " + employees.LastName
+                    FullName = employees.FirstName + " " + employees.LastName,
+                    Department = employees.Department
                 };
                 managerRoleViewModels.Add(managerRoleViewModel);
             }
@@ -98,7 +106,7 @@ namespace EEIMS.Controllers
         //
         // GET: /UserId
         [HttpGet]
-        public  ActionResult AssignRoleToEmployee()
+        public  ActionResult AssignRoles()
         {
             populateRolesListItem();
             return View();
@@ -107,7 +115,7 @@ namespace EEIMS.Controllers
         //
         // POST: /UserId
         [HttpPost]
-        public async Task<ActionResult> AssignRoleToEmployee(AddRoleToUserViewModel model)
+        public async Task<ActionResult> AssignRoles(AddRoleToUserViewModel model)
         {
             if (ModelState.IsValid)
             {   
@@ -145,6 +153,39 @@ namespace EEIMS.Controllers
             return View(model);
         }
 
+
+        // GET: Remove roles from user
+        public async Task<ActionResult> RevokeRoles(string id)
+        {
+            var context = new ApplicationDbContext();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            var user = await userManager.FindByIdAsync(id);
+
+            if (user != null)
+            {
+                var roles = await userManager.GetRolesAsync(user.Id);
+                var result = await userManager.RemoveFromRolesAsync(user.Id, roles.ToArray());
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user.Id, "Employee");
+                    return RedirectToAction("AdminIndex", "Admin");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Failed to remove roles from the user.");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "User not found.");
+            }
+
+            return RedirectToAction("AdminIndex", "Admin");
+        }
+
+        //
+        // polpulate the roles list item
         public void populateRolesListItem()
         {
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));

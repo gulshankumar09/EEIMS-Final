@@ -1,0 +1,125 @@
+﻿@model EEIMS.Models.UpdateEmployeeViewModel
+
+@{
+    ViewBag.Title = "DetailsAdminUse";
+}
+
+<h2>DetailsAdminUse</h2>
+
+
+
+<hr />
+
+
+@using (Html.BeginForm("UpdateEmployee", "Employee", FormMethod.Post, new { id = "employeeUpdateForm" }))
+{
+    @Html.HiddenFor(model => model.Id)
+
+    <div>
+        <dl class="dl-horizontal">
+            <dt>
+                Employee ID:
+            </dt>
+
+            <dd>
+                @Html.TextBoxFor(model => model.EmployeeId, new { id = "EmployeeId", @readonly = "readonly", @class = "form-control" })
+            </dd>
+
+            <dt>
+                First Name:
+            </dt>
+
+            <dd>
+                @Html.TextBoxFor(model => model.FirstName, new { id = "FirstName", @readonly = "readonly", @class = "form-control" })
+            </dd>
+
+            <dt>
+                Last Name:
+            </dt>
+
+            <dd>
+                @Html.TextBoxFor(model => model.LastName, new { id = "LastName", @readonly = "readonly", @class = "form-control" })
+            </dd>
+
+            <dt>
+                Designation:
+            </dt>
+
+            <dd>
+                @Html.TextBoxFor(model => model.Designation, new { id = "Designation", @readonly = "readonly", @class = "form-control" })
+            </dd>
+
+            <dt>
+                Department:
+            </dt>
+
+            <dd>
+                @Html.TextBoxFor(model => model.Department, new { id = "Department", @readonly = "readonly", @class = "form-control" })
+            </dd>
+
+
+            <dt>
+                Phone Number:
+            </dt>
+
+            <dd>
+                @Html.TextBoxFor(model => model.PhoneNumber, new { id = "PhoneNumber", @readonly = "readonly", @class = "form-control" })
+            </dd>
+
+            <dt>
+                Email:
+            </dt>
+
+            <dd>
+                @Html.TextBoxFor(model => model.Email, new { id = "Email", @readonly = "readonly", @class = "form-control" })
+            </dd>
+
+            <dt>
+                Organization:
+            </dt>
+
+            <dd>
+                @Html.TextBoxFor(model => model.Organization, new { id = "Organization", @readonly = "readonly", @class = "form-control" })
+            </dd>
+
+        </dl>
+    </div>
+
+    <input type="submit" value="Update" class="btn btn-primary" />
+}
+<p>
+    @Html.ActionLink("Back", "Index", "Employee")
+</p>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+
+          $('.form-control').on('dblclick', function () {
+              $(this).prop('readonly', false);
+          });
+
+          $('.form-control').on('blur', function () {
+              $(this).prop('readonly', true);
+          });
+
+          $('#employeeUpdateForm').on('submit', function (event) {
+              event.preventDefault();
+              $.ajax({
+                  url: $(this).attr('action'),
+                  type: $(this).attr('method'),
+                  data: $(this).serialize(),
+                  success: function (data) {
+                      console.log(data);
+                  },
+                  error: function (error) {
+                      console.log("Please, Try again !" + error);
+                  }
+              });
+          });
+      });
+    </script>
+}
+

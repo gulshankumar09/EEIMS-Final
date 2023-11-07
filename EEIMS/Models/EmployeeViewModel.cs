@@ -41,8 +41,9 @@ namespace EEIMS.Models
 
     public class GetAllEmployeeVewModel
     {
+        public string Id { get; set; }
 
-        [Display(Name = "Employee Id")]
+        [Display(Name = "Emp Id")]
         public int EmployeeId { get; set; }
 
         [Display(Name = "Full Name")]

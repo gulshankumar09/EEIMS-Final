@@ -15,13 +15,11 @@ namespace EEIMS.Functionalities
         void Update(UpdateEmployeeViewModel model);
 
         void DeleteById(int id);
-        void Delete(Expression<Func<Employee, bool>> where);
 
         Employee GetById(string id);
         Employee Get(Expression<Func<Employee, bool>> where);
 
-        IEnumerable<Employee> GetAllEmployee();
-        IEnumerable<Employee> GetMany(Expression<Func<Employee, bool>> where);
+        IEnumerable<Employee> GetAllVerifiedEmployee();
     }
 }
 

@@ -33,12 +33,32 @@ namespace EEIMS.Controllers
         {
             return View();
         }
+        //
+        // GET: /Employee/Details ---> to check and update details by admin
+        public ActionResult DetailsAdminUse(string id)
+        {
+            var employee = _employeeRepository.GetById(id);
+
+            var newDetails = new UpdateEmployeeViewModel
+            {
+                Id = employee.Id,
+                EmployeeId = employee.EmployeeId,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                Designation = employee.Designation,
+                Department = employee.Department,
+                PhoneNumber = employee.PhoneNumber,
+                Email = employee.Email,
+                Organization = employee.Organization
+            };
+            return View(newDetails);
+        }
 
         //
         // GET: /EmployeeList
-        public ActionResult GetEmployeeList()
+        public ActionResult GetVerifiedEmployeeList()
         {
-            var employees = _employeeRepository.GetAllEmployee().ToList();
+            var employees = _employeeRepository.GetAllVerifiedEmployee().ToList();
 
             return Json(employees, JsonRequestBehavior.AllowGet);
         }
@@ -73,10 +93,16 @@ namespace EEIMS.Controllers
             return View();
         }
 
+        //
+        // get authenticated employee during a session
         [HttpGet]
-        public ActionResult GetEmployeeDetail()
+        public ActionResult GetEmployeeDetail(string id)
         {
-            var employee = _employeeRepository.GetById(User.Identity.GetUserId());
+            if (id == null)
+            {
+                id = User.Identity.GetUserId();
+            }
+            var employee = _employeeRepository.GetById(id);
 
             var newDetails = new UpdateEmployeeViewModel
             {
@@ -104,15 +130,8 @@ namespace EEIMS.Controllers
             return View(model);
         }
 
-        
-
-
-        public ActionResult Delete(int id)
-        {
-            _employeeRepository.DeleteById(id);
-            return View();
-        }
-
+        //
+        // to edit employee user see and update his/her profile
         public ActionResult EmployeeProfile()
         {
             return View();
