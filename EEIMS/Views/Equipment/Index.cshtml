@@ -5,59 +5,69 @@
     ViewBag.Title = "Index";
 }
 
-<h3>Equipments</h3>
+<div class="container-fluid px-4">
+    <h3 class="mt-4">Equipment Details</h3>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="@Url.Action("AdminDashboard", "Admin")">Dashboard</a></li>
+        <li class="breadcrumb-item active">Equipments</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Equipment List
+        </div>
+        <div class="card-body">
+            <table id="equipmentTbl">
 
-<table id="equipmentTbl" class="table table-info table-light table-hover ">
-    <caption>List of equipmets</caption>
-
-</table>
-
-
-@section scripts{
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script> <!--to covert the serialized date to date format-->
-    <script>
-        $(document).ready(function () {
-            $('#equipmentTbl').DataTable({
-                ajax: {
-                    url: '/Equipment/GetAllEquipments',
-                    dataSrc: ''
-                },
-                columns: [
-                    { title: 'ID', data: 'EquipmentId' },
-                    { title: 'Name', data: 'Name' },
-                    { title: 'Model', data: 'ItemModel' },
-                    { title: 'Serial No.', data: 'SerialNumber' },
-                    {
-                        title: 'Status',
-                        data: 'EquipmentStatus',
-                        render: function (data) {
-                            return data ? 'in-use' : 'not-in-use';
-                        }
-                    },
-                    {
-                        title: 'Assigned',
-                        data: 'IsAssigned',
-                        render: function (data) {
-                            return data ? 'Busy' : 'Available';
-                        }
-                    },
-                    {
-                        title: 'Purchase Date',
-                        data: 'PurchaseDate',
-                        render: function (data) {
-                            return moment(data).format('YYYY-MM-DD');
-                        }
-                    },
-                    { title: 'Category', data: 'CategoryName' },
-{
-                        title: 'Action',
-                        data: 'EquipmentId',
-                        render: function (data) {
-                            return `<a class="btn btn-danger" href="/Equipment/Details/${data}">Details</a>`;
-                        }
-                    }
-                ]
-            });
-        });
-    </script>
-}
+            </table>
+        </div>
+    </div>
+</div>
+        @section scripts{
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script> <!--to covert the serialized date to date format-->
+            <script>
+                $(document).ready(function () {
+                    $('#equipmentTbl').DataTable({
+                        ajax: {
+                            url: '/Equipment/GetAllEquipments',
+                            dataSrc: ''
+                        },
+                        columns: [
+                            { title: 'ID', data: 'EquipmentId' },
+                            { title: 'Name', data: 'Name' },
+                            { title: 'Model', data: 'ItemModel' },
+                            { title: 'Serial No.', data: 'SerialNumber' },
+                            {
+                                title: 'Status',
+                                data: 'EquipmentStatus',
+                                render: function (data) {
+                                    return data ? 'in-use' : 'not-in-use';
+                                }
+                            },
+                            {
+                                title: 'Assigned',
+                                data: 'IsAssigned',
+                                render: function (data) {
+                                    return data ? 'Busy' : 'Available';
+                                }
+                            },
+                            {
+                                title: 'Purchase Date',
+                                data: 'PurchaseDate',
+                                render: function (data) {
+                                    return moment(data).format('YYYY-MM-DD');
+                                }
+                            },
+                            { title: 'Category', data: 'CategoryName' },
+                            {
+                                title: 'Action',
+                                data: 'EquipmentId',
+                                render: function (data) {
+                                    return `<a class="btn btn-danger" href="/Equipment/Details/${data}">Details</a>`;
+                                }
+                            }
+                        ]
+                    });
+                });
+            </script>
+        }

@@ -4,43 +4,55 @@
     ViewBag.Title = "Index";
 }
 
-<h3>Employee List</h3>
-                    ,
-<table id="employeeTbl" class="table table-info table-light table-hover ">
-    <caption>List of members</caption>
-    
-</table>
+<div class="container-fluid px-4">
+    <h3 class="mt-4">Employees List</h3>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="@Url.Action("AdminDashboard", "Admin")">Dashboard</a></li>
+        <li class="breadcrumb-item active">Employee List</li>
+    </ol>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Employee's of Invia
+        </div>
+        <div class="card-body">
+            <table id="employeeTbl">
+
+            </table>
+        </div>
+    </div>
+</div>
+
+        @section scripts{
+            <script>
+                $(document).ready(function () {
+                    $('#employeeTbl').DataTable({
+                        ajax: {
+                            url: '/Employee/GetVerifiedEmployeeList',
+                            dataSrc: ''
+                        },
+                        columns: [
+                            { title: 'Emp ID', data: 'EmployeeId' },
+                            { title: 'First Name', data: 'FirstName' },
+                            { title: 'Last Name', data: 'LastName' },
+                            { title: 'Designation', data: 'Designation' },
+                            { title: 'Department', data: 'Department' },
+                            {
+                                title: 'Actions',
+                                data: null,
+                                render: function (data, type, row) {
+                                    return '<button class="btn btn-danger" onclick="GetEmployee(\'' + row.Id + '\')">Details</button>';
+                                }
+                            }
+                        ]
+                    });
+                });
+
+                function GetEmployee(id) {
+                    window.location.href = '/Employee/DetailsAdminUse/' + id;
+                }
 
 
-@section scripts{
-    <script>
-        $(document).ready(function () {
-            $('#employeeTbl').DataTable({
-                ajax: {
-                    url: '/Employee/GetVerifiedEmployeeList',
-                    dataSrc: ''
-                },
-                columns: [
-                    { title: 'Emp ID', data: 'EmployeeId' },
-                    { title: 'First Name', data: 'FirstName' },
-                    { title: 'Last Name', data: 'LastName' },
-                    { title: 'Designation', data: 'Designation' },
-                    { title: 'Department', data: 'Department' },
-                    {
-                        title: 'Actions',
-                        data: null,
-                        render: function (data, type, row) {
-                            return '<button class="btn btn-danger" onclick="GetEmployee(\'' + row.Id +'\')">Details</button>';
-                        }
-                    }
-                ]
-            });
-        });
-
-        function GetEmployee(id) {
-            window.location.href = '/Employee/DetailsAdminUse/'+ id;
+            </script>
         }
-
-        
-    </script>
-}

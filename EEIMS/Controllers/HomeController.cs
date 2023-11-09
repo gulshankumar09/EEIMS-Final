@@ -14,6 +14,11 @@ namespace EEIMS.Controllers
             return View();
         }
 
+        public ActionResult EmployeeDashboard()
+        {
+            return View();
+        }
+
         [Authorize]
         public ActionResult About()
         {

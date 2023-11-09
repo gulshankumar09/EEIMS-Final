@@ -4,60 +4,76 @@
     ViewBag.Title = "GetAllAssignments";
 }
 
-<h2>GetAllAssignments</h2>
+<div class="container-fluid px-4">
+    <h3 class="mt-4">Equipment Assignment Details</h3>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="@Url.Action("AdminDashboard", "Admin")">Dashboard</a></li>
+        <li class="breadcrumb-item active">Assignment</li>
+    </ol>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            Assign Id:
-        </th>
-        <th>
-            Assign Date:
-        </th>
-        <th>
-           Equipment:
-        </th>
-        <th>
-           Empl ID:
-        </th>
-        <th>
-            Name:
-        </th>
-        <th>
-            Due Date:
-        </th>
-       @* <th></th>*@
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.AssignId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AssignDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Equipment.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EmployeeId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Employee.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ExpectedReturnDate)
-        </td>
-        @*<td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.AssignId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.AssignId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.AssignId })
-        </td>*@
-    </tr>
-}
+    <p>
+        @Html.ActionLink("Create New", "Create","" ,new {@class="btn btn-primary"})
+    </p>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Admins List
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <tr>
+                    <th>
+                        Assign Id
+                    </th>
+                    <th>
+                        Assign Date
+                    </th>
+                    <th>
+                        Equipment
+                    </th>
+                    <th>
+                        Empl ID
+                    </th>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Due Date
+                    </th>
+                    @* <th></th>*@
+                </tr>
 
-</table>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AssignId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AssignDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Equipment.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EmployeeId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Employee.FirstName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ExpectedReturnDate)
+                        </td>
+                        @*<td>
+                                @Html.ActionLink("Edit", "Edit", new { id=item.AssignId }) |
+                                @Html.ActionLink("Details", "Details", new { id=item.AssignId }) |
+                                @Html.ActionLink("Delete", "Delete", new { id=item.AssignId })
+                            </td>*@
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>

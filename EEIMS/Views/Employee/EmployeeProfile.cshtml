@@ -4,90 +4,62 @@
     ViewBag.Title = "Profile";
 }
 
-<h4>Profile Details</h4>
+<div class="container-fluid px-4">
+    <h3 class="mt-4">Your Profile</h3>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="@Url.Action("Index", "Home")">Home</a></li>
+        <li class="breadcrumb-item active">Profile</li>
+    </ol>
 
-<hr />
+    @using (Html.BeginForm("UpdateEmployee", "Employee", FormMethod.Post, new { id = "employeeUpdateForm" }))
+    {
+        @Html.HiddenFor(model => model.Id)
 
+        <div class="row g-3">
+            <div class="col-md-2">
+                <label for="EmployeeId" class="form-label">Employee ID:</label>
+                @Html.TextBoxFor(model => model.EmployeeId, new { id = "EmployeeId", @readonly = "readonly", @class = "form-control", required = "required" })
+            </div>
 
-@using (Html.BeginForm("UpdateEmployee", "Employee", FormMethod.Post, new { id = "employeeUpdateForm" }))
-{
-    @Html.HiddenFor(model => model.Id)
+            <div class="col-md-5">
+                <label for="FirstName" class="form-label">First Name:</label>
+                @Html.TextBoxFor(model => model.FirstName, new { id = "FirstName", @readonly = "readonly", @class = "form-control", required = "required" })
+            </div>
 
-    <div>
-        <dl class="dl-horizontal">
-            <dt>
-                Employee ID:
-            </dt>
+            <div class="col-md-5">
+                <label for="LastName" class="form-label">Last Name:</label>
+                @Html.TextBoxFor(model => model.LastName, new { id = "LastName", @readonly = "readonly", @class = "form-control", required = "required" })
+            </div>
 
-            <dd>
-                @Html.TextBoxFor(model => model.EmployeeId, new { id = "EmployeeId", @readonly = "readonly", @class = "form-control" })
-            </dd>
+            <div class="col-md-4">
+                <label for="Designation" class="form-label">Designation:</label>
+                @Html.TextBoxFor(model => model.Designation, new { id = "Designation", @readonly = "readonly", @class = "form-control", required = "required" })
+            </div>
 
-            <dt>
-                First Name:
-            </dt>
+            <div class="col-md-4">
+                <label for="Department" class="form-label">Department:</label>
+                @Html.TextBoxFor(model => model.Department, new { id = "Department", @readonly = "readonly", @class = "form-control", required = "required" })
+            </div>
+            <div class="col-md-4">
+                <label for="Organization" class="form-label">Organization:</label>
+                @Html.TextBoxFor(model => model.Organization, new { id = "Organization", @readonly = "readonly", @class = "form-control", required = "required" })
+            </div>
 
-            <dd>
-                @Html.TextBoxFor(model => model.FirstName, new { id = "FirstName", @readonly = "readonly", @class = "form-control" })
-            </dd>
+            <div class="col-md-4">
+                <label for="PhoneNumber" class="form-label">Phone Number:</label>
+                @Html.TextBoxFor(model => model.PhoneNumber, new { id = "PhoneNumber", @readonly = "readonly", @class = "form-control", required = "required" })
+            </div>
 
-            <dt>
-                Last Name:
-            </dt>
-
-            <dd>
-                @Html.TextBoxFor(model => model.LastName, new { id = "LastName", @readonly = "readonly", @class = "form-control" })
-            </dd>
-
-            <dt>
-                Designation:
-            </dt>
-
-            <dd>
-                @Html.TextBoxFor(model => model.Designation, new { id = "Designation", @readonly = "readonly", @class = "form-control" })
-            </dd>
-
-            <dt>
-                Department:
-            </dt>
-
-            <dd>
-                @Html.TextBoxFor(model => model.Department, new { id = "Department", @readonly = "readonly", @class = "form-control" })
-            </dd>
-
-
-            <dt>
-                Phone Number:
-            </dt>
-
-            <dd>
-                @Html.TextBoxFor(model => model.PhoneNumber, new { id = "PhoneNumber", @readonly = "readonly", @class = "form-control" })
-            </dd>
-
-            <dt>
-                Email:
-            </dt>
-
-            <dd>
-                @Html.TextBoxFor(model => model.Email, new { id = "Email", @readonly = "readonly", @class="form-control" })
-            </dd>
-
-            <dt>
-                Organization:
-            </dt>
-
-            <dd>
-                @Html.TextBoxFor(model => model.Organization, new { id = "Organization", @readonly = "readonly", @class = "form-control" })
-            </dd>
-
-        </dl>
-    </div>
-
-    <input type="submit" value="Update" class="btn btn-primary" />
-}
-<p>
-    @Html.ActionLink("Back", "Index", "Employee")
-</p>
+            <div class="col-md-8">
+                <label for="Email" class="form-label">Email:</label>
+                @Html.TextBoxFor(model => model.Email, new { id = "Email", @readonly = "readonly", @class = "form-control", required = "required" })
+            </div>
+            <div class="col-12 d-flex justify-content-center">
+                <input type="submit" value="update" class="btn btn-primary" />
+            </div>
+        </div>
+     }
+</div>
 
 
 @section Scripts {
@@ -137,4 +109,4 @@
             });
         });
     </script>
-}
+    }

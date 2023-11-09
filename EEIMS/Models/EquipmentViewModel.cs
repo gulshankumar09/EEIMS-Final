@@ -24,6 +24,9 @@ namespace EEIMS.Models
 
         [Display(Name = "Equipment Status")]
         public bool EquipmentStatus { get; set; }
+
+        [Required]
+        [Display(Name = "Category ID")]
         public int CategoryId { get; set; }
     }
 

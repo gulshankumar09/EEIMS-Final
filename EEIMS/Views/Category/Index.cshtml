@@ -4,35 +4,52 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
 
-<p>
-    @Html.ActionLink("Add Category", "AddOrUpdateCategory", "Category" ,htmlAttributes: new {@class="btn btn-primary"})
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.CategoryId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CategoryName)
-        </th>
-        <th></th>
-    </tr>
+<div class="container-fluid px-4">
+    <h3 class="mt-4">Category</h3>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="@Url.Action("AdminDashboard", "Admin")">Dashboard</a></li>
+        <li class="breadcrumb-item active">Category</li>
+    </ol>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CategoryId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CategoryName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "AddOrUpdateCategory", new { id = item.CategoryId }) |
-            @Html.ActionLink("Delete", "DeleteCategory", new {  id=item.CategoryId })
-        </td>
-    </tr>
-}
+    <p>
+        @Html.ActionLink("Add Category", "AddOrUpdateCategory", "Category", htmlAttributes: new { @class = "btn btn-primary" })
+    </p>
 
-</table>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Equipment List
+        </div>
+        <div class="card-body">
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CategoryId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CategoryName)
+                    </th>
+                    <th>Actions</th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CategoryId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CategoryName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "AddOrUpdateCategory", new { id = item.CategoryId }, new { @class = "btn btn-info" })
+                            @Html.ActionLink("Delete", "DeleteCategory", new { id = item.CategoryId  }, new { @class = "btn btn-danger" })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>
