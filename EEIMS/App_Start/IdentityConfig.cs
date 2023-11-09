@@ -25,20 +25,30 @@ namespace EEIMS
         public Task SendAsync(IdentityMessage message)
         {
             // email service here to send an email.
-            var msg = new MailMessage();
-            msg.From = new MailAddress("gk326747@gmail.com");
-            msg.To.Add(new MailAddress(message.Destination));
-            msg.Subject = message.Subject;
-            msg.Body = message.Body;
+            try
+            {
+                var msg = new MailMessage();
+                msg.From = new MailAddress("gk326747@gmail.com");
+                msg.To.Add(new MailAddress(message.Destination));
+                msg.Subject = message.Subject;
+                msg.Body = message.Body;
+                msg.IsBodyHtml = true;
 
-            SmtpClient smtpClient = new SmtpClient();
-            smtpClient.Host = "smtp.gmail.com";
-            smtpClient.Port = 587;
-            smtpClient.Credentials = new NetworkCredential("gk326747@gmail.com", "oozywgwjqbiikywd");
-            smtpClient.EnableSsl = true;
-            smtpClient.Send(msg);
+                SmtpClient smtpClient = new SmtpClient();
+                smtpClient.Host = "smtp.gmail.com";
+                smtpClient.Port = 587;
+                smtpClient.Credentials = new NetworkCredential("gk326747@gmail.com", "oozywgwjqbiikywd");
+                smtpClient.EnableSsl = true;
+                smtpClient.Send(msg);
 
-            return Task.FromResult(0);
+                return Task.FromResult(0);
+            }
+            catch (Exception error)
+            {
+
+                throw new HttpException(500, "An error occurred while sending the email.", error);
+                
+            }
         }
     }
 

@@ -1,23 +1,23 @@
-﻿
-@model EEIMS.Models.GetAllEmployeeVewModel
+﻿@model EEIMS.Models.GetAllEmployeeVewModel
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "NonVerifiedEmployeeList";
 }
 
-<h3>Employee List</h3>
+<h2>Non-Verified Employee List</h2>
+
                     ,
-<table id="employeeTbl" class="table table-info table-light table-hover ">
-    <caption>List of members</caption>
-    
+<table id="userTbl" class="table table-info table-light table-hover ">
+
 </table>
 
 
 @section scripts{
     <script>
         $(document).ready(function () {
-            $('#employeeTbl').DataTable({
+            $('#userTbl').DataTable({
                 ajax: {
-                    url: '/Employee/GetVerifiedEmployeeList',
+                    url: '/Employee/GetNonVerifiedEmployeeList',
                     dataSrc: ''
                 },
                 columns: [
@@ -41,6 +41,8 @@
             window.location.href = '/Employee/DetailsAdminUse/'+ id;
         }
 
-        
+
     </script>
 }
+
+

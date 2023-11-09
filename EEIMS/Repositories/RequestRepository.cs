@@ -1,14 +1,16 @@
-﻿using EEIMS.Models;
+﻿using EEIMS.Functionalities;
+using EEIMS.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace EEIMS.Repositories
 {
-    public class RequestRepository
+    public class RequestRepository: IRequestRepository
     {
         
 
@@ -19,7 +21,7 @@ namespace EEIMS.Repositories
             _context = new ApplicationDbContext();
         }
 
-        public void CreateNewRequest(CreateNewRequestViewModel requestViewModel)
+        void IRequestRepository.CreateNewRequest(CreateNewRequestViewModel requestViewModel)
         {
             try
             {
@@ -42,7 +44,7 @@ namespace EEIMS.Repositories
             }
         }
 
-        public IEnumerable<ReviewRequestsViewModel> GetRequestedByEmployees()
+        IEnumerable<ReviewRequestsViewModel> IRequestRepository.GetRequestedByEmployees()
         {
             try
             {
@@ -53,8 +55,32 @@ namespace EEIMS.Repositories
                     RequestDate = r.RequestDate,
                     Status = r.Status,
                     Comments = r.Comments,
-                    RequestedBy = r.RequestedBy.FirstName + " " + r.RequestedBy.LastName,
-                    Category = r.Category.CategoryName
+                    RequestedByEmployee = r.RequestedBy.FirstName + " " + r.RequestedBy.LastName,
+                    Category = r.Category.CategoryName,
+                    EmployeeId = r.RequestedBy.EmployeeId
+                }).ToList();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: " + ex.Message);
+                return null;
+            }
+        }
+        
+        IEnumerable<ReviewRequestsViewModel> IRequestRepository.GetRequestedHistory()
+        {
+            try
+            {
+                var requests = _context.Requests.Where(r => r.Status == RequestStatus.Approved || r.Status == RequestStatus.Rejected).ToList();
+                return requests.Select(r => new ReviewRequestsViewModel
+                {
+                    RequestId = r.RequestId,
+                    RequestDate = r.RequestDate,
+                    Status = r.Status,
+                    Comments = r.Comments,
+                    RequestedByEmployee = r.RequestedBy.FirstName + " " + r.RequestedBy.LastName,
+                    Category = r.Category.CategoryName,
+                    EmployeeId = r.RequestedBy.EmployeeId
                 }).ToList();
             }
             catch (Exception ex)
@@ -64,7 +90,7 @@ namespace EEIMS.Repositories
             }
         }
 
-        public bool ApproveRequest(int requestId)
+        bool IRequestRepository.ApproveRequest(int requestId)
         {
             try
             {
@@ -83,7 +109,7 @@ namespace EEIMS.Repositories
             return false;
         }
         
-        public bool DenyRequest(int requestId)
+        bool IRequestRepository.DenyRequest(int requestId)
         {
             try
             {
@@ -99,7 +125,8 @@ namespace EEIMS.Repositories
             {
                 Console.WriteLine("An error occurred: " + ex.Message);
             }
-                return false;
+            return false;
         }
+
     }
 }

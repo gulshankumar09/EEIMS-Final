@@ -7,7 +7,7 @@
 <h2>ReviewRequests</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Request History", "RequestHistory", "Request")
 </p>
 <table class="table">
     <tr>
@@ -18,15 +18,18 @@
             @Html.DisplayNameFor(model => model.RequestDate)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Comments)
+            @Html.DisplayNameFor(model => model.EmployeeId)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.RequestedBy)
+            @Html.DisplayNameFor(model => model.RequestedByEmployee)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Category)
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.Comments)
+        </th>
+        <th>Resolve</th>
     </tr>
 
 @foreach (var item in Model) {
@@ -38,13 +41,16 @@
             @Html.DisplayFor(modelItem => item.RequestDate)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Comments)
+            @Html.DisplayFor(modelItem => item.EmployeeId)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.RequestedBy)
+            @Html.DisplayFor(modelItem => item.RequestedByEmployee)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Category)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comments)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |

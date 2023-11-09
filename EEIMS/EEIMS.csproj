@@ -195,9 +195,11 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RequestController.cs" />
+    <Compile Include="Functionalities\IAssignmentRepository.cs" />
     <Compile Include="Functionalities\ICategoryRepository.cs" />
     <Compile Include="Functionalities\IEmployeeRepository.cs" />
     <Compile Include="Functionalities\IEquipmentRepository.cs" />
+    <Compile Include="Functionalities\IRequestRepository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -213,9 +215,22 @@
     <Compile Include="Migrations\202311060417376_addColumnToEmployee.designer.cs">
       <DependentUpon>202311060417376_addColumnToEmployee.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202311070429085_UpdateEquipment.cs" />
+    <Compile Include="Migrations\202311070429085_UpdateEquipment.designer.cs">
+      <DependentUpon>202311070429085_UpdateEquipment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202311070514499_UpdateEquipment2.cs" />
+    <Compile Include="Migrations\202311070514499_UpdateEquipment2.designer.cs">
+      <DependentUpon>202311070514499_UpdateEquipment2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202311072257333_updateDatetime.cs" />
+    <Compile Include="Migrations\202311072257333_updateDatetime.designer.cs">
+      <DependentUpon>202311072257333_updateDatetime.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="ModelConfigurations\AssignmentConfiguration.cs" />
     <Compile Include="ModelConfigurations\EmployeeConfiguration.cs" />
+    <Compile Include="ModelConfigurations\EquipmentConfiguration.cs" />
     <Compile Include="ModelConfigurations\RequestConfiguration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminViewModel.cs" />
@@ -343,19 +358,26 @@
     <Content Include="Views\Admin\GetManagerUsers.cshtml" />
     <Content Include="Views\Category\AddOrUpdateCategory.cshtml" />
     <Content Include="Views\Category\Index.cshtml" />
-    <Content Include="Views\Equipment\AddNewEquipment.cshtml" />
+    <Content Include="Views\Equipment\AddEquipment.cshtml" />
     <Content Include="Views\Equipment\Index.cshtml" />
     <Content Include="Views\Equipment\EditEquipment.cshtml" />
     <Content Include="Views\Request\Index.cshtml" />
     <Content Include="Views\Request\AddNewRequest.cshtml" />
-    <Content Include="Views\Request\ReviewRequests.cshtml" />
-    <Content Include="Views\Assignment\CreateNewAssinment.cshtml" />
+    <Content Include="Views\Request\PendingRequests.cshtml" />
+    <Content Include="Views\Assignment\AssignEquipments.cshtml" />
     <Content Include="Views\Assignment\Index.cshtml" />
     <Content Include="Views\Employee\UpdateEmployee.cshtml" />
     <Content Include="Views\Employee\GetEmployeeDetail.cshtml" />
     <Content Include="Views\Employee\EmployeeProfile.cshtml" />
     <Content Include="Views\Admin\ManagerIndex.cshtml" />
     <Content Include="Views\Employee\DetailsAdminUse.cshtml" />
+    <Content Include="Views\Equipment\GetAllEquipments.cshtml" />
+    <Content Include="Views\Admin\AdminDashboard.cshtml" />
+    <Content Include="Views\Assignment\UpdateAssignments.cshtml" />
+    <Content Include="Views\Request\ApproveRequest.cshtml" />
+    <Content Include="Views\Employee\NonVerifiedEmployeeList.cshtml" />
+    <Content Include="Views\Request\RequestHistory.cshtml" />
+    <Content Include="Views\Assignment\GetAllAssignments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -374,6 +396,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202311060417376_addColumnToEmployee.resx">
       <DependentUpon>202311060417376_addColumnToEmployee.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202311070429085_UpdateEquipment.resx">
+      <DependentUpon>202311070429085_UpdateEquipment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202311070514499_UpdateEquipment2.resx">
+      <DependentUpon>202311070514499_UpdateEquipment2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202311072257333_updateDatetime.resx">
+      <DependentUpon>202311072257333_updateDatetime.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

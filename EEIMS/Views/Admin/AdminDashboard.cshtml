@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewBag.Title = "AdminDashboard";
+}
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+                <div class="card-body d-flex justify-content-between">
+                    <span>New Requests</span>
+                    <span class="rounded-circle d-flex justify-content-center align-content-center" style="background-color:red;width:27px">
+                        <span style="font-size:1.1rem;font-weight:normal;color:antiquewhite" class="notification-circle" id="newRequestCount"></span>
+                    </span>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="@Url.Action("Index","Request")">View Request</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-warning text-white mb-4">
+                <div class="card-body d-flex justify-content-between">
+                    <span>Verify Employees</span>
+                    <span class="rounded-circle d-flex justify-content-center align-content-center" style="background-color:darkred;width:27px">
+                        <span style="font-size:1.1rem;font-weight:bold;color:antiquewhite" class="notification-circle" id="nonVerifiedCount"></span>
+                    </span>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between d-flex">
+                    <a class="small text-white stretched-link" href="@Url.Action("NonVerifiedEmployeeList", "Employee")">Verify New Joins</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">Success Card</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-danger text-white mb-4">
+                <div class="card-body">Danger Card</div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    
+    <script>
+    $(document).ready(function () {
+        window.onpageshow = function (event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        };
+
+        $.ajax({
+            url: '@Url.Action("GetNonVerifiedEmployeeCount", "Employee")',
+            type: 'GET',
+            success: function (data) {
+                $('#nonVerifiedCount').text(data);
+                
+            },
+            error: function (error) {
+                console.log("Error: " + error);
+            }
+        });
+
+        $.ajax({
+            url: '@Url.Action("PendingRequestCount", "Request")',
+            type: 'GET',
+            success: function (data) {
+                $('#newRequestCount').text(data);
+                
+            },
+            error: function (error) {
+                console.log("Error: " + error);
+            }
+        });
+
+
+    });
+    </script>}

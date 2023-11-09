@@ -72,11 +72,9 @@ namespace EEIMS.Models
         public string LastName { get; set; }
 
         [Required]
-        [Display(Name = "Designation")]
         public string Designation { get; set; }
 
         [Required]
-        [Display(Name = "Department")]
         public string Department { get; set; }
 
         [Required]
@@ -85,12 +83,19 @@ namespace EEIMS.Models
         public string PhoneNumber { get; set; }
 
         [Required]
-        [Display(Name = "Email")]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Required]
         public string Organization { get; set; }
+
+        [Display(Name = "Is Verified")]
+        public bool IsVerified { get; set; }
+
+
     }
+
+  
 
    
 }

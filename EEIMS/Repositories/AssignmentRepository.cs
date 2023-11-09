@@ -1,43 +1,94 @@
-﻿using EEIMS.Models;
+﻿using EEIMS.Functionalities;
+using EEIMS.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
 namespace EEIMS.Repositories
 {
-    public class AssignmentRepository
+    public class AssignmentRepository: IAssignmentRepository
     {
-        ApplicationDbContext _context;
+        private ApplicationDbContext _context;
 
-        public AssignmentRepository()
+        public AssignmentRepository(ApplicationDbContext applicationDbContext)
         {
-            _context = new ApplicationDbContext();
+            _context = applicationDbContext;
         }
 
-        public bool CreateAssignemt(createAssignmentViewModel assignment)
+        public ApplicationDbContext Context
         {
-            try
+            get
+            {
+                return _context ?? new ApplicationDbContext();
+            }
+            private set
+            {
+                _context = value;
+            }
+        }
+
+        bool IAssignmentRepository.CreateAssignemt(CreateAssignmentViewModel assignment)
+        {
+            foreach(var equipmentId in assignment.EquipmentIds)
             {
                 var newAssign = new Assignment
                 {
                     EmployeeId = assignment.EmployeeId,
-                    EquipmentId = assignment.EquipmentId,
+                    EquipmentId = equipmentId,
                     AssignDate = DateTime.Now,
                     ExpectedReturnDate = assignment.ExpectedReturnDate,
-                    ActualReturnDate = assignment.ActualReturnDate,
                     assignStatus = AssignStatus.assigned
                 };
 
-                _context.Assignments.Add(newAssign);
-                _context.SaveChanges();
-                return true;
+                // Updating the assign equipment status
+                var equipment = Context.Equipments.Find(equipmentId);
+                if (equipment != null)
+                {
+                    equipment.IsAssigned = true;
+                    Context.Entry(equipment).State = EntityState.Modified;
+                }
+                Context.Assignments.Add(newAssign);
+                Context.SaveChanges();
             }
-            catch (Exception ex)
+            return true;
+        }
+
+        UpdateAssignmentsViewModel IAssignmentRepository.GetAssignmentById(int id)
+        {
+            var temp = Context.Assignments.Where(a => a.AssignId == id).FirstOrDefault();
+            var newTemp = new UpdateAssignmentsViewModel
             {
-                Console.WriteLine("An error occurred: " + ex.Message);
+                EmployeeId = temp.EmployeeId,
+                EquipmentId = temp.EquipmentId,
+                ExpectedReturnDate = temp.ExpectedReturnDate
+            };
+            return newTemp;
+        }
+
+        bool IAssignmentRepository.UpdateAssignment(UpdateAssignmentsViewModel assignment)
+        {
+            var temp = Context.Assignments.Where(a => a.AssignId == assignment.AssignId).FirstOrDefault();
+            if (temp != null)
+            {
+                temp.EmployeeId = assignment.EmployeeId;
+                temp.EquipmentId = assignment.EquipmentId;
+                temp.ExpectedReturnDate = assignment.ExpectedReturnDate;
+                temp.AssignDate = DateTime.Now;
+                temp.assignStatus = AssignStatus.assigned;
+                Context.Entry(temp).State = EntityState.Modified;
+                Context.SaveChanges();
+                return true;
             }
             return false;
         }
+
+        IEnumerable<Assignment> IAssignmentRepository.GetAllAssignments()
+        {
+            var temp = Context.Assignments.ToList();
+            return temp;
+        }
+
     }
 }

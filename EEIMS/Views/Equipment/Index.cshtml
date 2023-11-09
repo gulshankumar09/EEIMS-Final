@@ -1,80 +1,63 @@
-﻿@model IEnumerable<EEIMS.Models.Equipment>
+﻿@model EEIMS.Models.ViewEquipmentViewModel
+
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h3>Equipments</h3>
 
-<p>
-    @Html.ActionLink("Create New", "AddNewEquipment")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.EquipmentId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ItemModel)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.SerialNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EquipmentStatus)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsAssigned)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PurchaseDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CategoryId)
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.EquipmentId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ItemModel)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.SerialNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EquipmentStatus)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsAssigned)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.PurchaseDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CategoryId)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "EditEquipment", new { id=item.EquipmentId }) |
-            @Html.ActionLink("Delete", "RemoveEquipment", new { id=item.EquipmentId })
-        </td>
-    </tr>
-}
+<table id="equipmentTbl" class="table table-info table-light table-hover ">
+    <caption>List of equipmets</caption>
 
 </table>
+
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script> <!--to covert the serialized date to date format-->
+    <script>
+        $(document).ready(function () {
+            $('#equipmentTbl').DataTable({
+                ajax: {
+                    url: '/Equipment/GetAllEquipments',
+                    dataSrc: ''
+                },
+                columns: [
+                    { title: 'ID', data: 'EquipmentId' },
+                    { title: 'Name', data: 'Name' },
+                    { title: 'Model', data: 'ItemModel' },
+                    { title: 'Serial No.', data: 'SerialNumber' },
+                    {
+                        title: 'Status',
+                        data: 'EquipmentStatus',
+                        render: function (data) {
+                            return data ? 'in-use' : 'not-in-use';
+                        }
+                    },
+                    {
+                        title: 'Assigned',
+                        data: 'IsAssigned',
+                        render: function (data) {
+                            return data ? 'Busy' : 'Available';
+                        }
+                    },
+                    {
+                        title: 'Purchase Date',
+                        data: 'PurchaseDate',
+                        render: function (data) {
+                            return moment(data).format('YYYY-MM-DD');
+                        }
+                    },
+                    { title: 'Category', data: 'CategoryName' },
+{
+                        title: 'Action',
+                        data: 'EquipmentId',
+                        render: function (data) {
+                            return `<a class="btn btn-danger" href="/Equipment/Details/${data}">Details</a>`;
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}

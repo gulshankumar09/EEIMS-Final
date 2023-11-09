@@ -27,7 +27,7 @@ namespace EEIMS.Controllers
         }
 
         [HttpGet]
-        public ActionResult AddNewCategory(int id =0)
+        public ActionResult AddOrUpdateCategory(int id =0)
         {
             if (id != 0)
             {

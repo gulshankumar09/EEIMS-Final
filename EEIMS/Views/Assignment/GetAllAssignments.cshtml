@@ -1,0 +1,63 @@
+﻿@model IEnumerable<EEIMS.Models.Assignment>
+
+@{
+    ViewBag.Title = "GetAllAssignments";
+}
+
+<h2>GetAllAssignments</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            Assign Id:
+        </th>
+        <th>
+            Assign Date:
+        </th>
+        <th>
+           Equipment:
+        </th>
+        <th>
+           Empl ID:
+        </th>
+        <th>
+            Name:
+        </th>
+        <th>
+            Due Date:
+        </th>
+       @* <th></th>*@
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssignId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AssignDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Equipment.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmployeeId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Employee.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExpectedReturnDate)
+        </td>
+        @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.AssignId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.AssignId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.AssignId })
+        </td>*@
+    </tr>
+}
+
+</table>

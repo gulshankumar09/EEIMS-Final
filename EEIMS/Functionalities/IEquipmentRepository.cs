@@ -9,10 +9,12 @@ namespace EEIMS.Functionalities
 {
     public interface IEquipmentRepository
     {
-        IEnumerable<Equipment> GetAllEquipments();
+        IEnumerable<ViewEquipmentViewModel> GetAllEquipments();
         UpdateEquipmentViewModel GetEquipment(int id);
         int AddEquipment(AddEquipmentViewModel item);
         int RemoveEquipment(int id);
         int UpdateEquipment(UpdateEquipmentViewModel item);
+        IEnumerable<ViewEquipmentViewModel> GetNotAssinedEquipments();
+
     }
 }

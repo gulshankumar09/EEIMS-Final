@@ -21,6 +21,9 @@ namespace EEIMS.ModelConfigurations
             HasRequired(r => r.Equipment)
             .WithMany()
             .HasForeignKey(r => r.EquipmentId);
+
+            Property(e => e.ExpectedReturnDate).HasColumnType("datetime2");
+            Property(e => e.ActualReturnDate).HasColumnType("datetime2");
         }
     }
 }

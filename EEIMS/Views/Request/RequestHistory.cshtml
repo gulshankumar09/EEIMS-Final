@@ -1,0 +1,62 @@
+﻿@model IEnumerable<EEIMS.Models.ReviewRequestsViewModel>
+
+@{
+    ViewBag.Title = "RequestHistory";
+}
+
+<h2>Request History</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            Req ID
+        </th>
+        <th>
+            Date
+        </th>
+        <th>
+            Emp ID
+        </th>
+        <th>
+           Emp Name
+        </th>
+        <th>
+            Items
+        </th>
+        <th>
+            Comments
+        </th>
+        <th>
+            Status
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.RequestId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RequestDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmployeeId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RequestedByEmployee)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Category)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Comments)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        
+    </tr>
+}
+
+</table>

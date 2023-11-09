@@ -20,6 +20,8 @@ namespace EEIMS.Functionalities
         Employee Get(Expression<Func<Employee, bool>> where);
 
         IEnumerable<Employee> GetAllVerifiedEmployee();
+
+        IEnumerable<Employee> GetNonAllVerifiedEmployee();
     }
 }
 

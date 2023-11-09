@@ -11,7 +11,6 @@ namespace EEIMS.ModelConfigurations
     {
         public RequestConfiguration()
         {
-
             HasRequired(r => r.RequestedBy)
             .WithMany()
             .HasForeignKey(r => r.EmployeeId);
@@ -20,6 +19,8 @@ namespace EEIMS.ModelConfigurations
             HasRequired(r => r.Category)
             .WithMany()
             .HasForeignKey(r => r.CategoryId);
+
+            Property(e => e.RequestDate).HasColumnType("datetime2");
         }
     }
 }

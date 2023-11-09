@@ -17,11 +17,22 @@ namespace EEIMS.Controllers
     {
         // Operations for: Admin
 
+        //
+        // Show: Admin's Operations Dashboard
+        public ActionResult AdminDashboard()
+        {
+            return View();
+        }
+
+        //
+        // Show: /Admin list of all the users 
         public ActionResult AdminIndex()
         {
             return View();
         } 
         
+        //
+        // Show: /Manager list of all the users
         public ActionResult ManagerIndex()
         {
             return View();
@@ -40,7 +51,8 @@ namespace EEIMS.Controllers
             return new EmptyResult();
         }
 
-
+        //
+        // GET: Return Json for {AdminIndex}  --> Admin list of all the users
         public ActionResult GetAdminUsers()
         {
             var context = new ApplicationDbContext();
@@ -71,6 +83,8 @@ namespace EEIMS.Controllers
             return Json(adminRoleViewModels, JsonRequestBehavior.AllowGet);
         }
 
+        //
+        // GET: Return Json for {ManagerIndex}  --> Manager list of all the users
         public ActionResult GetManagerUsers()
         {
             var context = new ApplicationDbContext();
@@ -102,9 +116,9 @@ namespace EEIMS.Controllers
             return Json(managerRoleViewModels, JsonRequestBehavior.AllowGet);
         }
 
-
         //
-        // GET: /UserId
+        // GET: AssingRoles to the Users --> Admin or Manager
+        // (default: Employee) when Admin verifies the user then he/she will be assigned to the Employee role.
         [HttpGet]
         public  ActionResult AssignRoles()
         {
@@ -113,7 +127,7 @@ namespace EEIMS.Controllers
         }
 
         //
-        // POST: /UserId
+        // POST: AssingRoles to the Users --> Admin or Manager
         [HttpPost]
         public async Task<ActionResult> AssignRoles(AddRoleToUserViewModel model)
         {
@@ -154,7 +168,7 @@ namespace EEIMS.Controllers
         }
 
 
-        // GET: Remove roles from user
+        // GET: Revoke all Admin & Manager roles from user
         public async Task<ActionResult> RevokeRoles(string id)
         {
             var context = new ApplicationDbContext();
@@ -185,7 +199,7 @@ namespace EEIMS.Controllers
         }
 
         //
-        // polpulate the roles list item
+        // Method: polpulate the roles
         public void populateRolesListItem()
         {
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));

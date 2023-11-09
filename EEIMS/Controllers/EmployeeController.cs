@@ -1,4 +1,4 @@
-﻿using EEIMS.Functionalities;
+﻿ using EEIMS.Functionalities;
 using EEIMS.Models;
 using EEIMS.Repositories;
 using System;
@@ -17,22 +17,22 @@ namespace EEIMS.Controllers
     {
         // GET: Employee
 
-        IEmployeeRepository _employeeRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public EmployeeController()
-        {
-            
-        }
+        public EmployeeController() { }
 
         public EmployeeController(IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }
 
+        //
+        // Show: Organization Verified Employee List
         public ActionResult Index()
         {
             return View();
         }
+
         //
         // GET: /Employee/Details ---> to check and update details by admin
         public ActionResult DetailsAdminUse(string id)
@@ -49,13 +49,14 @@ namespace EEIMS.Controllers
                 Department = employee.Department,
                 PhoneNumber = employee.PhoneNumber,
                 Email = employee.Email,
-                Organization = employee.Organization
+                Organization = employee.Organization,
+                IsVerified = employee.IsVerified
             };
             return View(newDetails);
         }
 
         //
-        // GET: /EmployeeList
+        // GET: Return Json for { Index } ---> Verified Employees List
         public ActionResult GetVerifiedEmployeeList()
         {
             var employees = _employeeRepository.GetAllVerifiedEmployee().ToList();
@@ -64,7 +65,7 @@ namespace EEIMS.Controllers
         }
 
         //
-        // GET: /Employee/FirstTimeAddEmployee
+        // GET: To add new employee details when Users resiters themselves.
         [HttpGet]
         public ActionResult FirstTimeAddEmployee(string UserId)
         {
@@ -81,7 +82,7 @@ namespace EEIMS.Controllers
         }
 
         //
-        // POST: /Employee/FirstTimeAddEmployee
+        // POST: To add new employee details when Users resiters themselves.
         [HttpPost]
         public  ActionResult FirstTimeAddEmployee(FirstTimeAddEmployeeViewModel employee)
         {
@@ -94,7 +95,7 @@ namespace EEIMS.Controllers
         }
 
         //
-        // get authenticated employee during a session
+        // Get: authenticated employee during a session for update his/her details by Admins and Managers.
         [HttpGet]
         public ActionResult GetEmployeeDetail(string id)
         {
@@ -114,16 +115,18 @@ namespace EEIMS.Controllers
                 Department = employee.Department,
                 PhoneNumber = employee.PhoneNumber,
                 Email = employee.Email,
-                Organization = employee.Organization
+                Organization = employee.Organization,
             };
             return Json(employee, JsonRequestBehavior.AllowGet);
         }
-
+        //
+        // POST: authenticated employee during a session for update his/her details by Admins and Managers.
         [HttpPost]
-        public ActionResult UpdateEmployee(UpdateEmployeeViewModel model)
+        public ActionResult UpdateEmployee(UpdateEmployeeViewModel model, bool isVerified)
         {
             if (ModelState.IsValid)
             {
+                model.IsVerified = isVerified;
                 _employeeRepository.Update(model);
                 return RedirectToAction("Index");
             }
@@ -131,28 +134,36 @@ namespace EEIMS.Controllers
         }
 
         //
-        // to edit employee user see and update his/her profile
+        // Show: (Json uses) UpdateEmployee View for Admins and Managers
         public ActionResult EmployeeProfile()
         {
             return View();
         }
 
+        //
+        // Get: get all non-verified employees list
+        public ActionResult GetNonVerifiedEmployeeList()
+        {
+            var employees = _employeeRepository.GetNonAllVerifiedEmployee().ToList();
 
+            return Json(employees, JsonRequestBehavior.AllowGet);
+        }
         
+        public ActionResult GetNonVerifiedEmployeeCount()
+        {
+            var count = _employeeRepository.GetNonAllVerifiedEmployee().ToList().Count();
+
+            return Json(count, JsonRequestBehavior.AllowGet);
+        }
+
+
 
         //
-        //Created a Dropdown list for any
-        /*public void PopulateTrainerSelectList()  // function to get trainer list as dropdown
+        // Show: get all non-verified employees list
+        public ActionResult NonVerifiedEmployeeList()
         {
-            IRepositary<Trainer> trainerRepo = new TrainerRepositary();
-            var trainerOptions = trainerRepo.GetList();
-            IEnumerable<SelectListItem> trainerSelectList = trainerOptions.Select(c => new SelectListItem
-            {
-                Text = c.TrainerName,
-                Value = c.TrainerId.ToString()
-            }).ToList();
+            return View();
+        }
 
-            ViewBag.TrainerId = trainerSelectList;
-        }*/
     }
 }

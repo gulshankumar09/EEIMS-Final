@@ -21,23 +21,28 @@ namespace EEIMS.Controllers
         }
         public ActionResult Index()
         {
+            return View();
+        }
+
+        public ActionResult GetAllEquipments()
+        {
             var temp = _equipmentRepository.GetAllEquipments();
-            return View(temp);
+            return Json(temp, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
-        public ActionResult AddNewEquipment()
+        public ActionResult AddEquipment()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult AddNewEquipment(AddEquipmentViewModel model)
+        public ActionResult AddEquipment(AddEquipmentViewModel model)
         {
             if (ModelState.IsValid)
             {
                 _equipmentRepository.AddEquipment(model);
-                return RedirectToAction("Index", "Equipment");
+                return RedirectToAction("AddEquipment", "Equipment");
             }
             return View(model);
         }

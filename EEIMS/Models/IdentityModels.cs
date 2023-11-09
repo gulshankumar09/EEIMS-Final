@@ -32,6 +32,7 @@ namespace EEIMS.Models
             modelBuilder.Configurations.Add(new EmployeeConfiguration());
             modelBuilder.Configurations.Add(new RequestConfiguration());
             modelBuilder.Configurations.Add(new AssignmentConfiguration());
+            modelBuilder.Configurations.Add(new EquipmentConfiguration());
 
             base.OnModelCreating(modelBuilder);
 

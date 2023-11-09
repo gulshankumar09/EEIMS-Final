@@ -81,6 +81,12 @@
             <dd>
                 @Html.TextBoxFor(model => model.Organization, new { id = "Organization", @readonly = "readonly", @class = "form-control" })
             </dd>
+            <dt>
+                Is Verified:
+            </dt>
+            <dd>
+                @Html.CheckBoxFor(model => model.IsVerified, new { id = "IsVerified", @checked = Model.IsVerified })
+            </dd>
 
         </dl>
     </div>

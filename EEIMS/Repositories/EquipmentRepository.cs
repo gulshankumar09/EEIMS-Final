@@ -39,18 +39,26 @@ namespace EEIMS.Repositories
 
         int IEquipmentRepository.AddEquipment(AddEquipmentViewModel item)
         {
-            var model = new Equipment
+            try
             {
-                Name = item.Name,
-                ItemModel = item.ItemModel,
-                SerialNumber = item.SerialNumber,
-                Description = item.Description,
-                EquipmentStatus = item.EquipmentStatus,
-                CategoryId = item.CategoryId,
-                PurchaseDate= DateTime.Now
-            };
-            Context.Equipments.Add(model);
-            return Context.SaveChanges();
+                var model = new Equipment
+                {
+                    Name = item.Name,
+                    ItemModel = item.ItemModel,
+                    SerialNumber = item.SerialNumber,
+                    Description = item.Description,
+                    CategoryId = item.CategoryId,
+                    EquipmentStatus = true,
+                    PurchaseDate = DateTime.Now
+                };
+                Context.Equipments.Add(model);
+                return Context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         UpdateEquipmentViewModel IEquipmentRepository.GetEquipment(int id)
@@ -67,9 +75,43 @@ namespace EEIMS.Repositories
             }).FirstOrDefault();
         }
 
-        IEnumerable<Equipment> IEquipmentRepository.GetAllEquipments()
+        // Show all Equipments
+        IEnumerable<ViewEquipmentViewModel> IEquipmentRepository.GetAllEquipments()
         {
-            return Context.Equipments.ToList();
+            var equipments = Context.Equipments.Include("CategoryReference");
+            var mapEquip = equipments.Select(e => new ViewEquipmentViewModel
+            {
+                EquipmentId = e.EquipmentId,
+                Name = e.Name,
+                ItemModel = e.ItemModel,
+                SerialNumber = e.SerialNumber,
+                Description = e.Description,
+                EquipmentStatus = e.EquipmentStatus,
+                IsAssigned = e.IsAssigned,
+                PurchaseDate = e.PurchaseDate,
+                CategoryName = e.CategoryReference.CategoryName
+            }).ToList();
+
+            return mapEquip;
+        }
+        
+        // Show Equipments which is not assigned
+        IEnumerable<ViewEquipmentViewModel> IEquipmentRepository.GetNotAssinedEquipments()
+        {
+            var equipments = Context.Equipments.Include("CategoryReference").Where(e => e.IsAssigned == false);
+            var mapEquip = equipments.Select(e => new ViewEquipmentViewModel
+            {
+                EquipmentId = e.EquipmentId,
+                Name = e.Name,
+                ItemModel = e.ItemModel,
+                SerialNumber = e.SerialNumber,
+                Description = e.Description,
+                EquipmentStatus = e.EquipmentStatus,
+                PurchaseDate = e.PurchaseDate,
+                CategoryName = e.CategoryReference.CategoryName
+            }).ToList();
+
+            return mapEquip;
         }
 
         int IEquipmentRepository.RemoveEquipment(int id)

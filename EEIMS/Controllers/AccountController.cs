@@ -163,12 +163,14 @@ namespace EEIMS.Controllers
                     await UserManager.UpdateAsync(user);
 
                     string emailSubject = "Confirm your account";
-                    string OtpBody = "Your OTP is: " + otp;
+                    string OtpBody = "<h4>Your OTP is: <strong> \""+ otp + "\"</strong></h4>";
                     string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    string emailBody = "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>";
+                    string emailBody = "<p>Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a> </p>";
 
                     string emailBodyWithOtp = OtpBody + "     "+"or" + "       " + emailBody;
+
+                   
                    
                     await UserManager.SendEmailAsync(user.Id, emailSubject, emailBodyWithOtp);
 

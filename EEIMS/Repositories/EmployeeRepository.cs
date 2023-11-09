@@ -11,6 +11,8 @@ namespace EEIMS.Repositories
 {
     public class EmployeeRepository : IEmployeeRepository
     {
+        #region Properties
+
         private ApplicationDbContext _context;
 
         public EmployeeRepository() { }
@@ -31,6 +33,8 @@ namespace EEIMS.Repositories
                 _context = value; 
             }
         }
+
+        #endregion
 
         void IEmployeeRepository.AddOnce(FirstTimeAddEmployeeViewModel employee)
         {
@@ -59,6 +63,7 @@ namespace EEIMS.Repositories
                 temp.PhoneNumber = model.PhoneNumber;
                 temp.Email = model.Email;
                 temp.Organization = model.Organization;
+                temp.IsVerified = model.IsVerified;
 
                 SaveChanges();
             }
@@ -75,8 +80,7 @@ namespace EEIMS.Repositories
             SaveChanges();
         }
 
-        //
-        // For getting employee by Id (string Type)
+        // For getting employee by user_Id (string Type)
         Employee IEmployeeRepository.GetById(string id)
         {
             return Context.Employees.Where(e => e.Id == id).FirstOrDefault();
@@ -90,9 +94,13 @@ namespace EEIMS.Repositories
 
         IEnumerable<Employee> IEmployeeRepository.GetAllVerifiedEmployee()
         {
-            return Context.Employees.Where(e => e.IsVerified == true).ToList();
+            return Context.Employees.Where(e => e.IsVerified == true && e.Organization == "Invia").ToList();
         }
-
+        
+        IEnumerable<Employee> IEmployeeRepository.GetNonAllVerifiedEmployee()
+        {
+            return Context.Employees.Where(e => e.IsVerified == false && e.Organization == "Invia").ToList();
+        }
 
         void SaveChanges()
         {
