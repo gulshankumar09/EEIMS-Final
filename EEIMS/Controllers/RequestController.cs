@@ -26,6 +26,7 @@ namespace EEIMS.Controllers
 
         }
 
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult Index()
         {
             return View();
@@ -34,6 +35,7 @@ namespace EEIMS.Controllers
         //
         // Get: add new request
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult AddNewRequest()
         {
             var categories = _categoryRepository.GetCategories();
@@ -49,6 +51,7 @@ namespace EEIMS.Controllers
         //
         // Post: add new request
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult AddNewRequest(CreateNewGetViewModel requestViewModel)
         {
             if (ModelState.IsValid)
@@ -104,6 +107,7 @@ namespace EEIMS.Controllers
         //
         // Post: approve requests
         [HttpPost]
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult ApproveRequest(int id)
         {
             _requestRepository.ApproveRequest(id);
@@ -113,6 +117,7 @@ namespace EEIMS.Controllers
         //
         // Post: deny
         [HttpPost]
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult DenyRequest(int id)
         {
             _requestRepository.DenyRequest(id);

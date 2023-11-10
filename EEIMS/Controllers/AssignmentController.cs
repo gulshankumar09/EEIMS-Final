@@ -10,6 +10,7 @@ using System.Web.Mvc;
 
 namespace EEIMS.Controllers
 {
+    [Authorize(Roles = "Admin, Manager")]
     public class AssignmentController : Controller
     {
         // GET: Assignment

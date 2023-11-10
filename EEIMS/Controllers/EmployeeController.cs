@@ -28,6 +28,7 @@ namespace EEIMS.Controllers
 
         //
         // Show: Organization Verified Employee List
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult Index()
         {
             return View();
@@ -35,6 +36,7 @@ namespace EEIMS.Controllers
 
         //
         // GET: /Employee/Details ---> to check and update details by admin
+        [Authorize(Roles = "Admin")]
         public ActionResult DetailsAdminUse(string id)
         {
             var employee = _employeeRepository.GetById(id);
@@ -57,6 +59,7 @@ namespace EEIMS.Controllers
 
         //
         // GET: Return Json for { Index } ---> Verified Employees List
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult GetVerifiedEmployeeList()
         {
             var employees = _employeeRepository.GetAllVerifiedEmployee().ToList();
@@ -67,6 +70,7 @@ namespace EEIMS.Controllers
         //
         // GET: To add new employee details when Users resiters themselves.
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult FirstTimeAddEmployee(string UserId)
         {
             var emp = _employeeRepository.GetById(UserId);
@@ -84,6 +88,7 @@ namespace EEIMS.Controllers
         //
         // POST: To add new employee details when Users resiters themselves.
         [HttpPost]
+        [AllowAnonymous]
         public  ActionResult FirstTimeAddEmployee(FirstTimeAddEmployeeViewModel employee)
         {
             if (ModelState.IsValid)
@@ -97,6 +102,7 @@ namespace EEIMS.Controllers
         //
         // Get: authenticated employee during a session for update his/her details by Admins and Managers.
         [HttpGet]
+        [AllowAnonymous]
         public ActionResult GetEmployeeDetail(string id)
         {
             if (id == null)
@@ -120,8 +126,9 @@ namespace EEIMS.Controllers
             return Json(employee, JsonRequestBehavior.AllowGet);
         }
         //
-        // POST: authenticated employee during a session for update his/her details by Admins and Managers.
+        // POST: authenticated employee update his/her details by Admins and Managers.
         [HttpPost]
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult UpdateEmployee(UpdateEmployeeViewModel model, bool isVerified)
         {
             if (ModelState.IsValid)
@@ -135,6 +142,7 @@ namespace EEIMS.Controllers
 
         //
         // Show: (Json uses) UpdateEmployee View for Admins and Managers
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult EmployeeProfile()
         {
             return View();
@@ -142,13 +150,15 @@ namespace EEIMS.Controllers
 
         //
         // Get: get all non-verified employees list
+        [Authorize(Roles = "Admin")]
         public ActionResult GetNonVerifiedEmployeeList()
         {
             var employees = _employeeRepository.GetNonAllVerifiedEmployee().ToList();
 
             return Json(employees, JsonRequestBehavior.AllowGet);
         }
-        
+
+        [Authorize(Roles = "Admin")]
         public ActionResult GetNonVerifiedEmployeeCount()
         {
             var count = _employeeRepository.GetNonAllVerifiedEmployee().ToList().Count();
@@ -160,6 +170,7 @@ namespace EEIMS.Controllers
 
         //
         // Show: get all non-verified employees list
+        [Authorize(Roles = "Admin")]
         public ActionResult NonVerifiedEmployeeList()
         {
             return View();

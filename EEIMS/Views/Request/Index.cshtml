@@ -3,76 +3,89 @@
     ViewBag.Title = "Index";
 }
 
-<div class="container-fluid">
-    <p class="mt-3 me-0">
+<div class="container-fluid px-4">
+    <h3 class="mt-4">Request Action</h3>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="@Url.Action("AdminDashboard", "Admin")">Dashboard</a></li>
+        <li class="breadcrumb-item active">Request Action</li>
+    </ol>
+
+    <p class="mt-3">
         @Html.ActionLink("Request History", "RequestHistory", "Request", htmlAttributes: new { @class = "btn btn-primary" })
     </p>
 
-    <table id="pendingRequestTbl" class="table table-info table-light table-hover mt-3 "></table>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            New Requests
+        </div>
+        <div class="card-body">
+
+            <table id="pendingRequestTbl" ></table>
+        </div>
+    </div>
 </div>
+        @section scripts{
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script> <!--to covert the serialized date to date format-->
+            <script>
+                $(document).ready(function () {
+                    var table = $('#pendingRequestTbl').DataTable({
+                        ajax: {
+                            url: '/Request/PendingRequests',
+                            dataSrc: ''
+                        },
+                        columns: [
+                            { title: 'ID', data: 'RequestId' },
+                            {
+                                title: 'Date',
+                                data: 'RequestDate',
+                                render: function (data) {
+                                    return moment(data).format('DD-MM-YYYY');
+                                }
+                            },
+                            { title: 'Emp ID', data: 'EmployeeId' },
+                            { title: 'Name.', data: 'RequestedByEmployee' },
+                            { title: 'Item', data: 'Category' },
+                            { title: 'Comments', data: 'Comments' },
+                            {
+                                title: 'Action',
+                                data: 'RequestId',
+                                render: function (data) {
+                                    return '<button class="btn btn-primary" onclick="approveRequest(' + data + ')">Approve</button>' + '  ' +
+                                        '<button class="btn btn-danger" onclick="denyRequest(' + data + ')">Reject</button>';
+                                }
+                            }
+
+                        ]
+                    });
 
 
-@section scripts{
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script> <!--to covert the serialized date to date format-->
-    <script>
-        $(document).ready(function () {
-            var table = $('#pendingRequestTbl').DataTable({
-                ajax: {
-                    url: '/Request/PendingRequests',
-                    dataSrc: ''
-                },
-                columns: [
-                    { title: 'ID', data: 'RequestId' },
-                    {
-                        title: 'Date',
-                        data: 'RequestDate',
-                        render: function (data) {
-                            return moment(data).format('DD-MM-YYYY');
-                        }
-                    },
-                    { title: 'Emp ID', data: 'EmployeeId' },
-                    { title: 'Name.', data: 'RequestedByEmployee' },
-                    { title: 'Item', data: 'Category' },
-                    { title: 'Comments', data: 'Comments' },
-                    {
-                        title: 'Action',
-                        data: 'RequestId',
-                        render: function (data) {
-                            return '<button class="btn btn-primary" onclick="approveRequest(' + data + ')">Approve</button>' + '  ' +
-                                '<button class="btn btn-danger" onclick="denyRequest(' + data + ')">Reject</button>';
-                        }
+                    window.approveRequest = function (requestId) {
+                        $.ajax({
+                            url: '/Request/ApproveRequest/' + requestId,
+                            method: 'POST',
+                            success: function () {
+                                table.ajax.reload();
+                                window.location.href = '/Assignment/AssignEquipments';
+                            },
+                            error: function (error) {
+                                console.error(error);
+                            }
+                        });
                     }
-                    
-                ]
-            });
 
-
-            window.approveRequest = function (requestId) {
-                $.ajax({
-                    url: '/Request/ApproveRequest/' + requestId,
-                    method: 'POST',
-                    success: function () {
-                        table.ajax.reload();
-                        window.location.href = '/Assignment/AssignEquipments';
-                    },
-                    error: function (error) {
-                        console.error(error);
+                    window.denyRequest = function (requestId) {
+                        $.ajax({
+                            url: '/Request/DenyRequest/' + requestId,
+                            method: 'POST',
+                            success: function () {
+                                table.ajax.reload();
+                            },
+                            error: function (error) {
+                                console.error(error);
+                            }
+                        });
                     }
                 });
-            }
-
-            window.denyRequest = function (requestId) {
-                $.ajax({
-                    url: '/Request/DenyRequest/' + requestId,
-                    method: 'POST',
-                    success: function () {
-                        table.ajax.reload();
-                    },
-                    error: function (error) {
-                        console.error(error);
-                    }
-                });
-            }
-        });
-    </script>
-}
+            </script>
+        }

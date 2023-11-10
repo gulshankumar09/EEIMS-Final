@@ -13,6 +13,7 @@ using System.Data.Entity;
 
 namespace EEIMS.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class AdminController : Controller
     {
         // Operations for: Admin
