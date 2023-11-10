@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using EEIMS.Functionalities;
 
 namespace EEIMS.Controllers
 {
@@ -17,7 +18,6 @@ namespace EEIMS.Controllers
     public class AdminController : Controller
     {
         // Operations for: Admin
-
         //
         // Show: Admin's Operations Dashboard
         public ActionResult AdminDashboard()

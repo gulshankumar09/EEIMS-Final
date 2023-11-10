@@ -378,9 +378,11 @@
     <Content Include="Views\Employee\NonVerifiedEmployeeList.cshtml" />
     <Content Include="Views\Request\RequestHistory.cshtml" />
     <Content Include="Views\Assignment\GetAllAssignments.cshtml" />
+    <Content Include="Views\Equipment\EquipmentCountByCategory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\AdminManager\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace EEIMS.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Manager")]
     public class EquipmentController : Controller
     {
         // GET: Equipment
@@ -70,6 +70,14 @@ namespace EEIMS.Controllers
                 return RedirectToAction("Index", "Equipment");
             }
             return View(model);
+        }
+
+        //
+        // Get: count of all the equipments in each category
+        public ActionResult EquipmentCountByCategory()
+        {
+            var equipmentCountByCategory = _equipmentRepository.GetEquipmentCountByCategory();
+            return View(equipmentCountByCategory);
         }
     }
 }

@@ -133,6 +133,16 @@ namespace EEIMS.Repositories
 
         }
 
+        IDictionary<string, int> IEquipmentRepository.GetEquipmentCountByCategory()
+        {
+            return Context.Categories
+                .Select(c => new
+                {
+                    CategoryName = c.CategoryName,
+                    EquipmentCount = c.Equipments.Count
+                })
+                .ToDictionary(c => c.CategoryName, c => c.EquipmentCount);
+        }
 
         #endregion
     }

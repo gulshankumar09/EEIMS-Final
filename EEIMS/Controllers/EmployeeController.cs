@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using Microsoft.AspNet.Identity;
+using System.Data.SqlClient;
 
 namespace EEIMS.Controllers
 {
@@ -39,22 +40,35 @@ namespace EEIMS.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult DetailsAdminUse(string id)
         {
-            var employee = _employeeRepository.GetById(id);
-
-            var newDetails = new UpdateEmployeeViewModel
+            try
             {
-                Id = employee.Id,
-                EmployeeId = employee.EmployeeId,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Designation = employee.Designation,
-                Department = employee.Department,
-                PhoneNumber = employee.PhoneNumber,
-                Email = employee.Email,
-                Organization = employee.Organization,
-                IsVerified = employee.IsVerified
-            };
-            return View(newDetails);
+                var employee = _employeeRepository.GetById(id);
+
+                var newDetails = new UpdateEmployeeViewModel
+                {
+                    Id = employee.Id,
+                    EmployeeId = employee.EmployeeId,
+                    FirstName = employee.FirstName,
+                    LastName = employee.LastName,
+                    Designation = employee.Designation,
+                    Department = employee.Department,
+                    PhoneNumber = employee.PhoneNumber,
+                    Email = employee.Email,
+                    Organization = employee.Organization,
+                    IsVerified = employee.IsVerified
+                };
+                return View(newDetails);
+            }
+            catch (SqlException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return View("_Error");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return new HttpStatusCodeResult(500, "Internal server error" + ex.Message);
+            }
         }
 
         //
@@ -62,9 +76,22 @@ namespace EEIMS.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public ActionResult GetVerifiedEmployeeList()
         {
-            var employees = _employeeRepository.GetAllVerifiedEmployee().ToList();
+            try
+            {
+                var employees = _employeeRepository.GetAllVerifiedEmployee().ToList();
+                return Json(employees, JsonRequestBehavior.AllowGet);
+            }
+            catch (SqlException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return View("_Error");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return new HttpStatusCodeResult(500, "Internal server error" + ex.Message);
+            }
 
-            return Json(employees, JsonRequestBehavior.AllowGet);
         }
 
         //
@@ -73,16 +100,29 @@ namespace EEIMS.Controllers
         [AllowAnonymous]
         public ActionResult FirstTimeAddEmployee(string UserId)
         {
-            var emp = _employeeRepository.GetById(UserId);
-
-            var modelVM = new FirstTimeAddEmployeeViewModel
+            try
             {
-                Id = emp.Id,
-                Email = emp.Email,
-                EmployeeId = emp.EmployeeId,
-            };
+                var emp = _employeeRepository.GetById(UserId);
 
-            return View(modelVM);
+                var modelVM = new FirstTimeAddEmployeeViewModel
+                {
+                    Id = emp.Id,
+                    Email = emp.Email,
+                    EmployeeId = emp.EmployeeId,
+                };
+
+                return View(modelVM);
+            }
+            catch (SqlException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return View("_Error");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return new HttpStatusCodeResult(500, "Internal server error" + ex.Message);
+            }
         }
 
         //
@@ -91,12 +131,24 @@ namespace EEIMS.Controllers
         [AllowAnonymous]
         public  ActionResult FirstTimeAddEmployee(FirstTimeAddEmployeeViewModel employee)
         {
-            if (ModelState.IsValid)
-            {
-                 _employeeRepository.AddOnce(employee);
-                return RedirectToAction("Index", "Employee");
+            try { 
+                if (ModelState.IsValid)
+                {
+                     _employeeRepository.AddOnce(employee);
+                    return RedirectToAction("Index", "Employee");
+                }
+                return View();
             }
-            return View();
+            catch (SqlException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return View("_Error");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return new HttpStatusCodeResult(500, "Internal server error" + ex.Message);
+            }
         }
 
         //
@@ -142,7 +194,7 @@ namespace EEIMS.Controllers
 
         //
         // Show: (Json uses) UpdateEmployee View for Admins and Managers
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize]
         public ActionResult EmployeeProfile()
         {
             return View();
@@ -166,8 +218,6 @@ namespace EEIMS.Controllers
             return Json(count, JsonRequestBehavior.AllowGet);
         }
 
-
-
         //
         // Show: get all non-verified employees list
         [Authorize(Roles = "Admin")]
@@ -175,6 +225,8 @@ namespace EEIMS.Controllers
         {
             return View();
         }
+
+
 
     }
 }

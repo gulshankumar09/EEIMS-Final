@@ -9,7 +9,7 @@ using System.Web.Mvc;
 
 namespace EEIMS.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin, Manager")]
     public class CategoryController : Controller
     {
         // GET: Category

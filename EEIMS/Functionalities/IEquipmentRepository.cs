@@ -16,5 +16,6 @@ namespace EEIMS.Functionalities
         int UpdateEquipment(UpdateEquipmentViewModel item);
         IEnumerable<ViewEquipmentViewModel> GetNotAssinedEquipments();
 
+        IDictionary<string, int> GetEquipmentCountByCategory();
     }
 }

@@ -26,6 +26,8 @@ namespace EEIMS.Controllers
 
         }
 
+        //
+        // Show the Request Action
         [Authorize(Roles = "Admin, Manager")]
         public ActionResult Index()
         {

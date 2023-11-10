@@ -81,6 +81,8 @@
                         <!-- Action Header -->
                         <div class="sb-sidenav-menu-heading">Admin Actions</div>
                         <!-- Employee -->
+                        @if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                        {
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             <div class="sb-nav-link-icon">
                                 <i class="fas fa-columns"></i>
@@ -95,6 +97,7 @@
                                 <a class="nav-link" href="@Url.Action("Index", "Employee")">Employees List</a>
                             </nav>
                         </div>
+                        }
 
                         <!-- Roles -->
                         @if(User.IsInRole("Admin"))
