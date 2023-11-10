@@ -1,4 +1,4 @@
-﻿@model IDictionary<string, int>
+﻿@model IDictionary<string, Tuple<int, int>>
 
 @{
     ViewBag.Title = "EquipmentCountByCategory";
@@ -6,29 +6,30 @@
 }
 
 
-    <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            Category List
-        </div>
-        <div class="card-body">
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Total Count</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>@item.Key</td>
-                            <td>@item.Value</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Category List
     </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Total Count</th>
+                    <th>Available Count</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Key</td>
+                        <td>@item.Value.Item1</td>
+                        <td>@item.Value.Item2</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

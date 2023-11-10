@@ -77,7 +77,7 @@ namespace EEIMS.Controllers
         public ActionResult EquipmentCountByCategory()
         {
             var equipmentCountByCategory = _equipmentRepository.GetEquipmentCountByCategory();
-            return View(equipmentCountByCategory);
+            return PartialView("EquipmentCountByCategory", equipmentCountByCategory);
         }
     }
 }

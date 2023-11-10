@@ -133,15 +133,16 @@ namespace EEIMS.Repositories
 
         }
 
-        IDictionary<string, int> IEquipmentRepository.GetEquipmentCountByCategory()
+        IDictionary<string, Tuple<int, int>> IEquipmentRepository.GetEquipmentCountByCategory()
         {
             return Context.Categories
                 .Select(c => new
                 {
                     CategoryName = c.CategoryName,
-                    EquipmentCount = c.Equipments.Count
+                    TotalEquipmentCount = c.Equipments.Count,
+                    AvailableEquipmentCount = c.Equipments.Count(e => e.IsAssigned == false)
                 })
-                .ToDictionary(c => c.CategoryName, c => c.EquipmentCount);
+                .ToDictionary(c => c.CategoryName, c => Tuple.Create(c.TotalEquipmentCount, c.AvailableEquipmentCount));
         }
 
         #endregion
