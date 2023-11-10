@@ -125,9 +125,5 @@ namespace EEIMS.Controllers
             _requestRepository.DenyRequest(id);
             return Json(new { success = true });
         }
-
-
-
-
     }
 }

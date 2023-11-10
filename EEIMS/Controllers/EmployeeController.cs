@@ -157,25 +157,38 @@ namespace EEIMS.Controllers
         [AllowAnonymous]
         public ActionResult GetEmployeeDetail(string id)
         {
-            if (id == null)
+            try
             {
-                id = User.Identity.GetUserId();
-            }
-            var employee = _employeeRepository.GetById(id);
+                if (id == null)
+                {
+                    id = User.Identity.GetUserId();
+                }
+                var employee = _employeeRepository.GetById(id);
 
-            var newDetails = new UpdateEmployeeViewModel
+                var newDetails = new UpdateEmployeeViewModel
+                {
+                    Id = employee.Id,
+                    EmployeeId = employee.EmployeeId,
+                    FirstName = employee.FirstName,
+                    LastName = employee.LastName,
+                    Designation = employee.Designation,
+                    Department = employee.Department,
+                    PhoneNumber = employee.PhoneNumber,
+                    Email = employee.Email,
+                    Organization = employee.Organization,
+                };
+                return Json(employee, JsonRequestBehavior.AllowGet);
+            }
+            catch (SqlException ex)
             {
-                Id = employee.Id,
-                EmployeeId = employee.EmployeeId,
-                FirstName = employee.FirstName,
-                LastName = employee.LastName,
-                Designation = employee.Designation,
-                Department = employee.Department,
-                PhoneNumber = employee.PhoneNumber,
-                Email = employee.Email,
-                Organization = employee.Organization,
-            };
-            return Json(employee, JsonRequestBehavior.AllowGet);
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return View("_Error");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return new HttpStatusCodeResult(500, "Internal server error" + ex.Message);
+            }
         }
         //
         // POST: authenticated employee update his/her details by Admins and Managers.
@@ -183,13 +196,26 @@ namespace EEIMS.Controllers
         [Authorize(Roles = "Admin, Manager")]
         public ActionResult UpdateEmployee(UpdateEmployeeViewModel model, bool isVerified)
         {
-            if (ModelState.IsValid)
+            try
             {
-                model.IsVerified = isVerified;
-                _employeeRepository.Update(model);
-                return RedirectToAction("Index");
+                if (ModelState.IsValid)
+                {
+                    model.IsVerified = isVerified;
+                    _employeeRepository.Update(model);
+                    return RedirectToAction("Index");
+                }
+                return View(model);
             }
-            return View(model);
+            catch (SqlException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return View("_Error");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return new HttpStatusCodeResult(500, "Internal server error" + ex.Message);
+            }
         }
 
         //
@@ -205,17 +231,43 @@ namespace EEIMS.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult GetNonVerifiedEmployeeList()
         {
-            var employees = _employeeRepository.GetNonAllVerifiedEmployee().ToList();
+            try
+            {
+                var employees = _employeeRepository.GetNonAllVerifiedEmployee().ToList();
 
-            return Json(employees, JsonRequestBehavior.AllowGet);
+                return Json(employees, JsonRequestBehavior.AllowGet);
+            }
+            catch (SqlException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return View("_Error");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return new HttpStatusCodeResult(500, "Internal server error" + ex.Message);
+            }
         }
 
         [Authorize(Roles = "Admin")]
         public ActionResult GetNonVerifiedEmployeeCount()
         {
-            var count = _employeeRepository.GetNonAllVerifiedEmployee().ToList().Count();
+            try 
+            { 
+                var count = _employeeRepository.GetNonAllVerifiedEmployee().ToList().Count();
 
-            return Json(count, JsonRequestBehavior.AllowGet);
+                return Json(count, JsonRequestBehavior.AllowGet);
+            }
+            catch (SqlException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return View("_Error");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return new HttpStatusCodeResult(500, "Internal server error" + ex.Message);
+            }
         }
 
         //

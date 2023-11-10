@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using EEIMS.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Data.SqlClient;
 
 namespace EEIMS.Controllers
 {
@@ -69,25 +70,38 @@ namespace EEIMS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: true);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+            try
+            { 
+                if (!ModelState.IsValid)
+                {
                     return View(model);
+                }
+
+                // To enable password failures to trigger account lockout, change to shouldLockout: true
+                var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: true);
+                switch (result)
+                {
+                    case SignInStatus.Success:
+                        return RedirectToLocal(returnUrl);
+                    case SignInStatus.LockedOut:
+                        return View("Lockout");
+                    case SignInStatus.RequiresVerification:
+                        return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    case SignInStatus.Failure:
+                    default:
+                        ModelState.AddModelError("", "Invalid login attempt.");
+                        return View(model);
+                }
+            }
+            catch (SqlException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return View("_Error");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return new HttpStatusCodeResult(500, "Internal server error" + ex.Message);
             }
         }
 
@@ -149,38 +163,51 @@ namespace EEIMS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                if (ModelState.IsValid)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                    var result = await UserManager.CreateAsync(user, model.Password);
+                    if (result.Succeeded)
+                    {
+                        await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
-                    //Generate the email confirmation otp
-                    var otp = new Random().Next(100000, 999999).ToString();
-                    user.OTP = otp;
-                    await UserManager.UpdateAsync(user);
+                        //Generate the email confirmation otp
+                        var otp = new Random().Next(100000, 999999).ToString();
+                        user.OTP = otp;
+                        await UserManager.UpdateAsync(user);
 
-                    string emailSubject = "Confirm your account";
-                    string OtpBody = "<h4>Your OTP is: <strong> \""+ otp + "\"</strong></h4>";
-                    string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    string emailBody = "<p>Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a> </p>";
+                        string emailSubject = "Confirm your account";
+                        string OtpBody = "<h4>Your OTP is: <strong> \""+ otp + "\"</strong></h4>";
+                        string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                        var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                        string emailBody = "<p>Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a> </p>";
 
-                    string emailBodyWithOtp = OtpBody + "     "+"or" + "       " + emailBody;
+                        string emailBodyWithOtp = OtpBody + "     "+"or" + "       " + emailBody;
 
                    
                    
-                    await UserManager.SendEmailAsync(user.Id, emailSubject, emailBodyWithOtp);
+                        await UserManager.SendEmailAsync(user.Id, emailSubject, emailBodyWithOtp);
 
-                    return RedirectToAction("VerifyOTP", new { userEmail = user.Email });
+                        return RedirectToAction("VerifyOTP", new { userEmail = user.Email });
+                    }
+                    AddErrors(result);
                 }
-                AddErrors(result);
-            }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
+                // If we got this far, something failed, redisplay form
+                return View(model);
+            }
+            catch (SqlException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return View("_Error");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return new HttpStatusCodeResult(500, "Internal server error" + ex.Message);
+            }
         }
 
         [HttpGet]
@@ -196,36 +223,49 @@ namespace EEIMS.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> VerifyOTP(VerifyOTPViewModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var user = await UserManager.FindByEmailAsync(model.Email);
-                if (user != null && user.OTP == model.OTP)
+                if (ModelState.IsValid)
                 {
-                    user.EmailConfirmed = true;
-                    user.OTP = null;
-                    await UserManager.UpdateAsync(user);
-
-                    var userId = user.Id;
-                    var emp = new Employee
+                    var user = await UserManager.FindByEmailAsync(model.Email);
+                    if (user != null && user.OTP == model.OTP)
                     {
-                        Email = model.Email,
-                        Id = userId
-                    };
+                        user.EmailConfirmed = true;
+                        user.OTP = null;
+                        await UserManager.UpdateAsync(user);
 
-                    using (var context = new ApplicationDbContext())
-                    {
-                        context.Employees.Add(emp);
-                        context.SaveChanges();
+                        var userId = user.Id;
+                        var emp = new Employee
+                        {
+                            Email = model.Email,
+                            Id = userId
+                        };
+
+                        using (var context = new ApplicationDbContext())
+                        {
+                            context.Employees.Add(emp);
+                            context.SaveChanges();
+                        }
+
+                        var temp = user.Id;
+                        return RedirectToAction("FirstTimeAddEmployee", "Employee", new {UserId = user.Id});
                     }
 
-                    var temp = user.Id;
-                    return RedirectToAction("FirstTimeAddEmployee", "Employee", new {UserId = user.Id});
+                    ModelState.AddModelError("", "Invalid verification code.");
                 }
 
-                ModelState.AddModelError("", "Invalid verification code.");
+                return View(model);
             }
-
-            return View(model);
+            catch (SqlException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return View("_Error");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return new HttpStatusCodeResult(500, "Internal server error" + ex.Message);
+            }
         }
         
         //
