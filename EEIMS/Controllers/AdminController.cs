@@ -14,12 +14,13 @@ using EEIMS.Functionalities;
 
 namespace EEIMS.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    
     public class AdminController : Controller
     {
         // Operations for: Admin
         //
-        // Show: Admin's Operations Dashboard
+        // Show: Admin's Operations Dashboardb
+        [Authorize(Roles ="Admin, Manager")]
         public ActionResult AdminDashboard()
         {
             return View();
@@ -27,20 +28,23 @@ namespace EEIMS.Controllers
 
         //
         // Show: /Admin list of all the users 
+        [Authorize(Roles = "Admin")]
         public ActionResult AdminIndex()
         {
             return View();
-        } 
-        
+        }
+
         //
         // Show: /Manager list of all the users
+        [Authorize(Roles = "Admin")]
         public ActionResult ManagerIndex()
         {
             return View();
-        }   
+        }
 
         //
         // use this function to create roles( accesible only via url) no navigation provided.
+        [AllowAnonymous]
         public async  Task<ActionResult> CreateRoles()
         {
             var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
@@ -54,6 +58,7 @@ namespace EEIMS.Controllers
 
         //
         // GET: Return Json for {AdminIndex}  --> Admin list of all the users
+
         public ActionResult GetAdminUsers()
         {
             var context = new ApplicationDbContext();
@@ -121,6 +126,7 @@ namespace EEIMS.Controllers
         // GET: AssingRoles to the Users --> Admin or Manager
         // (default: Employee) when Admin verifies the user then he/she will be assigned to the Employee role.
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public  ActionResult AssignRoles()
         {
             populateRolesListItem();
@@ -130,6 +136,7 @@ namespace EEIMS.Controllers
         //
         // POST: AssingRoles to the Users --> Admin or Manager
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> AssignRoles(AddRoleToUserViewModel model)
         {
             if (ModelState.IsValid)
@@ -170,6 +177,7 @@ namespace EEIMS.Controllers
 
 
         // GET: Revoke all Admin & Manager roles from user
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> RevokeRoles(string id)
         {
             var context = new ApplicationDbContext();

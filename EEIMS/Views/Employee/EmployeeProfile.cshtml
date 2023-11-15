@@ -11,7 +11,7 @@
         <li class="breadcrumb-item active">Profile</li>
     </ol>
 
-    @using (Html.BeginForm("UpdateEmployee", "Employee", FormMethod.Post, new { id = "employeeUpdateForm" }))
+    @using (Html.BeginForm("UpdateProfile", "Employee", FormMethod.Post, new { id = "profileUpdateForm" }))
     {
         @Html.HiddenFor(model => model.Id)
 
@@ -93,7 +93,7 @@
                 $(this).prop('readonly', true);
             });
 
-            $('#employeeUpdateForm').on('submit', function (event) {
+            $('#profileUpdateForm').on('submit', function (event) {
                 event.preventDefault();
                 $.ajax({
                     url: $(this).attr('action'),
@@ -101,6 +101,7 @@
                     data: $(this).serialize(),
                     success: function (data) {
                         console.log(data);
+                        $.notify("Update Succefull", "success");
                     },
                     error: function (error) {
                         console.log("Please, Try again !" + error);

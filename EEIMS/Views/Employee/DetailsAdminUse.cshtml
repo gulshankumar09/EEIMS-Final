@@ -92,6 +92,7 @@
                         data: $(this).serialize(),
                         success: function (data) {
                             console.log(data);
+                            $.notify("Succefully Updated", "success");
                         },
                         error: function (error) {
                             console.log("Please, Try again !" + error);

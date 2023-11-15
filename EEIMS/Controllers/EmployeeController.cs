@@ -37,7 +37,7 @@ namespace EEIMS.Controllers
 
         //
         // GET: /Employee/Details ---> to check and update details by admin
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult DetailsAdminUse(string id)
         {
             try
@@ -193,7 +193,6 @@ namespace EEIMS.Controllers
         //
         // POST: authenticated employee update his/her details by Admins and Managers.
         [HttpPost]
-        [Authorize(Roles = "Admin, Manager")]
         public ActionResult UpdateEmployee(UpdateEmployeeViewModel model, bool isVerified)
         {
             try
@@ -219,8 +218,33 @@ namespace EEIMS.Controllers
         }
 
         //
+        // Post: to update the profiles
+        [HttpPost]
+        public ActionResult UpdateProfile(UpdateEmployeeViewModel model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    _employeeRepository.Update(model);
+                    return RedirectToAction("Index");
+                }
+                return View(model);
+            }
+            catch (SqlException ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return View("_Error");
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
+                return new HttpStatusCodeResult(500, "Internal server error" + ex.Message);
+            }
+        }
+
+        //
         // Show: (Json uses) UpdateEmployee View for Admins and Managers
-        [Authorize]
         public ActionResult EmployeeProfile()
         {
             return View();
@@ -228,7 +252,6 @@ namespace EEIMS.Controllers
 
         //
         // Get: get all non-verified employees list
-        [Authorize(Roles = "Admin")]
         public ActionResult GetNonVerifiedEmployeeList()
         {
             try
@@ -249,7 +272,6 @@ namespace EEIMS.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin")]
         public ActionResult GetNonVerifiedEmployeeCount()
         {
             try 
@@ -272,7 +294,7 @@ namespace EEIMS.Controllers
 
         //
         // Show: get all non-verified employees list
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Manager")]
         public ActionResult NonVerifiedEmployeeList()
         {
             return View();
