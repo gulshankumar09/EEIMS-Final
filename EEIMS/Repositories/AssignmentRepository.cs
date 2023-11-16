@@ -8,7 +8,7 @@ using System.Web;
 
 namespace EEIMS.Repositories
 {
-    public class AssignmentRepository: IAssignmentRepository
+    public class AssignmentRepository: IAssignmentRepository, IDisposable
     {
         private ApplicationDbContext _context;
 
@@ -88,6 +88,25 @@ namespace EEIMS.Repositories
         {
             var temp = Context.Assignments.ToList();
             return temp;
+        }
+
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_context != null)
+                {
+                    _context.Dispose();
+                    _context = null;
+                }
+            }
+        }
+
+        void IDisposable.Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
     }

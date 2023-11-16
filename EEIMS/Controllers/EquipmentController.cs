@@ -14,11 +14,12 @@ namespace EEIMS.Controllers
     {
         // GET: Equipment
         private readonly IEquipmentRepository _equipmentRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public EquipmentController(IEquipmentRepository equipmentRepository)
+        public EquipmentController(IEquipmentRepository equipmentRepository, ICategoryRepository categoryRepository)
         {
             _equipmentRepository = equipmentRepository;
-        
+            _categoryRepository = categoryRepository;
         }
         public ActionResult Index()
         {
@@ -34,6 +35,7 @@ namespace EEIMS.Controllers
         [HttpGet]
         public ActionResult AddEquipment()
         {
+            PopulateCategoriesList();
             return View();
         }
 
@@ -45,6 +47,7 @@ namespace EEIMS.Controllers
                 _equipmentRepository.AddEquipment(model);
                 return RedirectToAction("AddEquipment", "Equipment");
             }
+            PopulateCategoriesList();
             return View(model);
         }
 
@@ -78,6 +81,17 @@ namespace EEIMS.Controllers
         {
             var equipmentCountByCategory = _equipmentRepository.GetEquipmentCountByCategory();
             return PartialView("EquipmentCountByCategory", equipmentCountByCategory);
+        }
+
+        public void PopulateCategoriesList()
+        {
+            var GetCategoryList = _categoryRepository.GetCategories().ToList();
+            IEnumerable<SelectListItem> CatList = GetCategoryList.Select(c => new SelectListItem
+            {
+                Value = c.CategoryId.ToString(), Text = c.CategoryId +" "+c.CategoryName
+            }).ToList();
+
+            ViewBag.CategoryList = CatList;
         }
     }
 }

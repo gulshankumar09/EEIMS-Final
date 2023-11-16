@@ -221,7 +221,5 @@ namespace EEIMS.Controllers
 
             ViewBag.Roles = roleItems;
         }
-
-
     }
 }
