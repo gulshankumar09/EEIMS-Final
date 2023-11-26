@@ -28,7 +28,7 @@ namespace EEIMS
             try
             {
                 var msg = new MailMessage();
-                msg.From = new MailAddress("gk326747@gmail.com");
+                msg.From = new MailAddress("dummy@gmail.com");
                 msg.To.Add(new MailAddress(message.Destination));
                 msg.Subject = message.Subject;
                 msg.Body = message.Body;
@@ -37,7 +37,7 @@ namespace EEIMS
                 SmtpClient smtpClient = new SmtpClient();
                 smtpClient.Host = "smtp.gmail.com";
                 smtpClient.Port = 587;
-                smtpClient.Credentials = new NetworkCredential("gk326747@gmail.com", "oozywgwjqbiikywd");
+                smtpClient.Credentials = new NetworkCredential("dummy@gmail.com", "--app-password--");
                 smtpClient.EnableSsl = true;
                 smtpClient.Send(msg);
 
